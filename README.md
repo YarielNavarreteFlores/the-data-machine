@@ -15,7 +15,7 @@
 ╚═╝     ╚═╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝╚══════╝
 ```
 
-### 🎮 Análisis de reseñas de videojuegos con NLP · IPN Licenciatura en Ciencia de Datos
+### 🎮 Análisis de reseñas de videojuegos con NLP · La máquina de datos
 
 ![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)
@@ -202,16 +202,16 @@ Sem 6  [2 Jun – 6 Jun]    ░░░░░░░░░░░░   🎓 Document
 
 ```
 🏫 Instituto Politécnico Nacional
-🏢 ESCOM / UPIIC
+🏢 ESCOM
 📖 Licenciatura en Ciencia de Datos
 📘 Unidad de Aprendizaje: Desarrollo de Aplicaciones para Análisis de Datos
-📅 Semestre IV · 2025
+📅 Semestre IV · 2026
 ```
 
 ---
 
 <div align="center">
 
-*Hecho con 🎮 y mucho café por el equipo The Data Machine · IPN 2025*
+*Hecho con 🎮 y mucho café por el equipo La Máquina de Datos*
 
 </div>
