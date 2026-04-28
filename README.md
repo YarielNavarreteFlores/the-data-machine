@@ -26,7 +26,7 @@
 
 ![Status](https://img.shields.io/badge/STATUS-EN%20DESARROLLO-yellow?style=for-the-badge)
 ![Semestre](https://img.shields.io/badge/SEMESTRE-IV-purple?style=for-the-badge)
-![IPN](https://img.shields.io/badge/IPN-ESCOM%20%2F%20UPIIC-8B0000?style=for-the-badge)
+![IPN](https://img.shields.io/badge/IPN-ESCOM%20%2F%20-8B0000?style=for-the-badge)
 
 </div>
 
