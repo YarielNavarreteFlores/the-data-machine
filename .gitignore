@@ -1,3 +1,6 @@
 data/processed/dataset_limpio.csv
 data/raw/games_march2025_cleaned.csv
 data/reviews_extra.json
+AGENTS.md
+.venv
+venv
