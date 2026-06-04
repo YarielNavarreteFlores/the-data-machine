@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import ast
 import math
 import random
 
@@ -50,8 +51,11 @@ st.markdown(BASE_CSS + """
 
 /* ── Entry animations ── */
 .tdm-stats { opacity: 0; animation: fadeInUp 0.8s ease 0.3s forwards; }
-.info-card { opacity: 0; transform: translateY(30px); }
-.carousel-track .game-card { opacity: 0; transform: translateY(30px); }
+.info-card { opacity: 0; transform: translateY(30px); animation: fadeInUp 0.6s ease forwards; }
+.info-card:nth-child(2) { animation-delay: 0.15s; }
+.info-card:nth-child(3) { animation-delay: 0.3s; }
+.cat-track .game-card { opacity: 0; transform: translateY(30px); animation: catStagger 0.5s ease forwards; animation-delay: calc(var(--i, 0) * 60ms); }
+@keyframes catStagger { to { opacity: 1; transform: translateY(0); } }
 
 /* ── Scroll indicator ── */
 .tdm-scroll {
@@ -122,9 +126,66 @@ st.markdown(BASE_CSS + """
 .tdm-tech-badge {
     display: inline-block; margin: 4px 5px; padding: 4px 12px;
     border-radius: 6px; font-size: 11px; font-family: 'Inter', sans-serif;
-    font-weight: 500; border: 1px solid rgba(255,255,255,0.06);
-    background: rgba(255,255,255,0.02); color: #e8eaf6;
+    font-weight: 500; border: 1px solid rgba(124,106,245,0.35);
+    background: #0b0e1a; color: #e8eaf6;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
 }
+.tdm-filter-box {
+    position: relative; z-index: 1;
+    background: #0b0e1a;
+    border: 1px solid rgba(124,106,245,0.5);
+    border-radius: 12px;
+    padding: 1.2rem 1.5rem 0.8rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+.tdm-filter-box .stTextInput > div > div > input,
+.tdm-filter-box .stMultiSelect > div > div {
+    background: #0b0e1a !important;
+    border: 1px solid rgba(124,106,245,0.5) !important;
+    color: #fff !important;
+    border-radius: 8px !important;
+    font-size: 13px !important;
+}
+.tdm-filter-box .stTextInput > div > div > input:focus,
+.tdm-filter-box .stMultiSelect > div > div:focus-within {
+    border-color: #7c6af5 !important;
+    box-shadow: 0 0 16px rgba(124,106,245,0.35) !important;
+}
+.tdm-filter-box .stTextInput > div > div > input::placeholder {
+    color: rgba(232,234,246,0.5) !important;
+}
+.tdm-filter-box label {
+    color: #fff !important;
+    font-family: 'Rajdhani', sans-serif !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.5px !important;
+    text-shadow: 0 1px 6px rgba(0,0,0,0.6) !important;
+}
+.tdm-filter-clear {
+    display: flex; align-items: flex-end; height: 100%;
+    padding-bottom: 2px;
+}
+.tdm-filter-clear button {
+    background: rgba(124,106,245,0.2) !important;
+    border: 1px solid rgba(124,106,245,0.5) !important;
+    color: #fff !important;
+    font-family: 'Rajdhani', sans-serif !important;
+    font-weight: 700 !important;
+    font-size: 12px !important;
+    border-radius: 8px !important;
+    padding: 0.25rem 1rem !important;
+    width: 100% !important;
+    transition: all 0.2s ease !important;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.4) !important;
+}
+.tdm-filter-clear button:hover {
+    background: rgba(124,106,245,0.35) !important;
+    border-color: #7c6af5 !important;
+    box-shadow: 0 0 12px rgba(124,106,245,0.3) !important;
+}
+.game-card-img { height: 200px !important; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -155,9 +216,35 @@ def load_catalog(path: str = "data/processed/dataset_limpio.csv") -> pd.DataFram
             "tags": ["Metroidvania,Indie,Difficult", "Souls-like,Action RPG,Dark Fantasy", "Farming Sim,Relaxing,RPG", "Open World,Cyberpunk,Action", "Survival,Exploration,Underwater", "Roguelike,Action,Mythology", "Co-op,Shooter,Space", "Sandbox,Adventure,2D", "Puzzle,Co-op,Sci-fi", "Platformer,Indie,Difficult"],
             "metacritic_score": [87, 96, 89, 76, 87, 93, 85, 83, 95, 94],
             "estimated_owners": ["2M-5M", "5M-10M", "10M-20M", "10M-20M", "5M-10M", "5M-10M", "5M-10M", "30M-50M", "10M-20M", "2M-5M"],
+            "release_date": ["2017-02-24", "2022-02-25", "2016-02-26", "2020-12-10", "2018-01-23", "2020-09-17", "2018-02-28", "2011-05-16", "2011-04-19", "2018-01-25"],
+            "genres": ["['Action','Indie','Metroidvania']", "['Action','RPG','Dark Fantasy']", "['Indie','Simulation','RPG']", "['Action','RPG','Open World']", "['Adventure','Indie','Survival']", "['Action','Indie','Roguelike']", "['Action','Co-op','Shooter']", "['Adventure','Indie','Sandbox']", "['Puzzle','Co-op','Sci-fi']", "['Indie','Platformer']"],
+            "discount": [0, 0, 33, 0, 0, 25, 0, 50, 0, 0],
+            "average_playtime_forever": [5230, 14580, 38920, 8720, 6120, 24190, 18750, 67120, 3150, 2380],
+            "average_playtime_2weeks": [85, 120, 320, 45, 210, 180, 360, 150, 0, 95],
+            "num_reviews_total": [158000, 567000, 420000, 523000, 185000, 312000, 289000, 890000, 218000, 105000],
         })
-    return df
 
+    if "display_tags" not in df.columns:
+        if "genres" in df.columns:
+            def _parse(g):
+                try:
+                    if pd.notna(g) and len(str(g)) > 3:
+                        p = ast.literal_eval(str(g))
+                        if isinstance(p, list):
+                            return ", ".join(p)
+                except:
+                    pass
+                return ""
+            df["display_tags"] = df["genres"].apply(_parse)
+        elif "tags" in df.columns:
+            df["display_tags"] = df["tags"].astype(str)
+        else:
+            df["display_tags"] = ""
+    if "release_date" not in df.columns:
+        df["release_date"] = "2000-01-01"
+    if "genres" not in df.columns:
+        df["genres"] = ""
+    return df
 
 def sentiment_label(pct):
     if pct >= 85: return '<span class="rating-pill r-pos">Muy positivo</span>'
@@ -170,9 +257,62 @@ def price_display(price):
     return f'<span class="game-price">MX${mxn:,.0f}</span>'
 
 
+def get_all_genres(df: pd.DataFrame) -> list:
+    genres = set()
+    for g in df["genres"].dropna():
+        try:
+            parsed = ast.literal_eval(str(g))
+            if isinstance(parsed, list):
+                for item in parsed:
+                    if item.strip():
+                        genres.add(item.strip())
+        except:
+            for part in str(g).split(","):
+                part = part.strip().strip("[]'\"{}")
+                if part:
+                    genres.add(part)
+    return sorted(genres)
+
+
+def _game_card_html(row):
+    name = row["name"]
+    img = row.get("header_image", "")
+    tags = row.get("display_tags", "")
+    pct = row["pct_pos_total"]
+    price = row["price"]
+    mc = row.get("metacritic_score", "—")
+    t = "".join(f'<span class="game-tag">{s.strip()}</span>' for s in tags.split(",")[:3] if s.strip())
+    return f"""
+<div class="game-card" data-game="{name}">
+  <div class="game-card-inner">
+    <img class="game-card-img" src="{img}" onerror="this.src='https://via.placeholder.com/300x200/0b0e1a/7c6af5?text=TDM'" alt="{name}"/>
+    <div class="game-card-body">
+      <div class="game-tags">{t}</div>
+      <div class="game-card-title">{name}</div>
+      <div class="game-meta">{sentiment_label(pct)} {price_display(price)}</div>
+      <div style="font-size:10px;color:#e8eaf6;margin-top:5px;font-family:'Orbitron',monospace;text-shadow:0 1px 8px rgba(0,0,0,0.5);">&#11088; {pct}% · METACORE {mc}</div>
+    </div>
+  </div>
+</div>"""
+
+
+def _cat_row_html(icon, title, games, max_cards=20):
+    games = games.head(max_cards)
+    cards = "".join(_game_card_html(row) for _, row in games.iterrows())
+    return f"""
+<div class="cat-row">
+  <div class="cat-title">{icon} {title}</div>
+  <div class="cat-wrapper">
+    <button class="cat-arrow cat-arrow-left">&#8249;</button>
+    <div class="cat-track">{cards}</div>
+    <button class="cat-arrow cat-arrow-right">&#8250;</button>
+  </div>
+</div>"""
+
+
 df = load_catalog()
 
-st.markdown('<div class="tdm-page">', unsafe_allow_html=True)
+st.markdown('<!-- tdm-page --><div class="tdm-page">', unsafe_allow_html=True)
 
 # ── Header ────────────────────────────────────────────────────────────────────
 user = st.session_state.get("username", "usuario")
@@ -244,9 +384,13 @@ for col, (letter, grad, title, desc) in zip(info_cols, [
   </div>
 </div>""", unsafe_allow_html=True)
 
+
+st.markdown('<div class="tdm-divider"></div>', unsafe_allow_html=True)
+
+
 # ── Featured game ──────────────────────────────────────────────────────────────
 featured = df.sample(1).iloc[0]
-ftags = "".join(f'<span class="game-tag">{t.strip()}</span>' for t in str(featured.get("tags", "")).split(",")[:3])
+ftags = "".join(f'<span class="game-tag">{t.strip()}</span>' for t in str(featured.get("display_tags", "")).split(",")[:3])
 st.markdown(f"""
 <div class="tdm-featured" data-game="{featured['name']}">
   <img src="{featured['header_image']}" onerror="this.src='https://via.placeholder.com/600x320/0b0e1a/7c6af5?text=⟡'" alt="">
@@ -263,42 +407,116 @@ st.markdown(f"""
 
 st.markdown('<div class="tdm-divider"></div>', unsafe_allow_html=True)
 
-# ── Catálogo ──────────────────────────────────────────────────────────────────
-st.markdown(f"""
-<div style="position:relative;z-index:1;display:flex;align-items:center;gap:12px;margin-bottom:0.5rem;">
-  <span class="tdm-section-title" style="margin-bottom:0;">▸ Catálogo de Juegos</span>
-  <span style="font-size:11px;color:#e8eaf6;font-family:'Orbitron',monospace;">{len(df)} TÍTULOS</span>
-</div>
-""", unsafe_allow_html=True)
 
-carousel_games = df.sample(n=30)
-carousel_html = '<div class="carousel-container"><div class="carousel-arrow carousel-arrow-left" id="carouselPrev">‹</div><div class="carousel-track" id="carouselTrack">'
+# ── Filtros de búsqueda ──────────────────────────────────────────────────────
+st.markdown('<div class="tdm-section-title">▸ Buscar juegos</div>', unsafe_allow_html=True)
 
-for _, game in carousel_games.iterrows():
-    tags_html = "".join(f'<span class="game-tag">{t.strip()}</span>' for t in str(game.get("tags", "")).split(",")[:3])
-    carousel_html += f"""
-<div class="game-card" data-game="{game['name']}">
-  <div class="game-card-inner">
-    <img class="game-card-img" src="{game['header_image']}" onerror="this.src='https://via.placeholder.com/300x200/0b0e1a/7c6af5?text=🎮'" alt="{game['name']}"/>
-    <div class="game-card-body">
-      <div class="game-tags">{tags_html}</div>
-      <div class="game-card-title">{game['name']}</div>
-      <div class="game-meta">{sentiment_label(game['pct_pos_total'])} {price_display(game['price'])}</div>
-      <div style="font-size:10px;color:#e8eaf6;margin-top:5px;font-family:'Orbitron',monospace;">⭐ {game['pct_pos_total']}% · METACORE {game.get('metacritic_score','—')}</div>
-    </div>
-  </div>
-</div>"""
+all_genres = get_all_genres(df)
+max_price_mxn = int(df["price"].max() * 20)
 
-num_pages = max(1, math.ceil(len(carousel_games) / 3))
-dots_html = '<div class="carousel-dots" id="carouselDots">'
-for i in range(num_pages):
-    dots_html += f'<span class="carousel-dot { "active" if i == 0 else "" }" data-index="{i}"></span>'
-dots_html += '</div>'
+st.markdown('<div class="tdm-filter-box">', unsafe_allow_html=True)
 
-carousel_html += '</div><div class="carousel-arrow carousel-arrow-right" id="carouselNext">›</div></div>' + dots_html
-st.markdown(carousel_html, unsafe_allow_html=True)
+r1 = st.columns([2, 3, 1])
+with r1[0]:
+    search_name = st.text_input("⟡ Nombre", placeholder="Ej: Dark Souls", key="filter_name")
+with r1[1]:
+    search_genres = st.multiselect("◆ Género", all_genres, placeholder="Selecciona géneros...", key="filter_genres")
+with r1[2]:
+    st.markdown('<div class="tdm-filter-clear">', unsafe_allow_html=True)
+    if st.button("⟡ Limpiar"):
+        for k in ["filter_name", "filter_genres", "filter_price", "filter_rating"]:
+            if k in st.session_state:
+                del st.session_state[k]
+        st.rerun()
+    st.markdown('</div>', unsafe_allow_html=True)
 
-# ── Tech stack ─────────────────────────────────────────────────────────────────
+r2 = st.columns(2)
+with r2[0]:
+    price_range = st.slider("★ Precio MXN", 0, max_price_mxn, (0, max_price_mxn), key="filter_price")
+with r2[1]:
+    min_rating = st.select_slider("▲ Rating mín.", options=[0, 50, 65, 75, 85, 95], value=0, key="filter_rating")
+
+st.markdown('</div>', unsafe_allow_html=True)
+
+filters_active = bool(search_name) or bool(search_genres) or price_range != (0, max_price_mxn) or min_rating > 0
+
+if filters_active:
+    filtered = df.copy()
+    if search_name:
+        filtered = filtered[filtered["name"].str.contains(search_name, case=False, na=False)]
+    if search_genres:
+        filtered = filtered[filtered["genres"].apply(
+            lambda g: any(sg in str(g) for sg in search_genres) if pd.notna(g) else False
+        )]
+    if price_range[0] > 0 or price_range[1] < max_price_mxn:
+        filtered = filtered[
+            (filtered["price"] * 20 >= price_range[0]) &
+            (filtered["price"] * 20 <= price_range[1])
+        ]
+    if min_rating > 0:
+        filtered = filtered[filtered["pct_pos_total"] >= min_rating]
+
+    if len(filtered) > 0:
+        st.markdown(f"""
+<div style="display:flex;align-items:center;gap:12px;margin:0.5rem 0;">
+  <span class="tdm-section-title" style="margin-bottom:0;font-size:25px;">▸ Resultados</span>
+  <span style="font-size:11px;color:#e8eaf6;font-family:'Orbitron',monospace;text-shadow:0 1px 8px rgba(0,0,0,0.5);">{len(filtered)} COINCIDENCIAS</span>
+</div>""", unsafe_allow_html=True)
+        st.markdown(_cat_row_html("", f"Resultados ({len(filtered)})", filtered, 50), unsafe_allow_html=True)
+    else:
+        st.markdown("""
+<div style="text-align:center;padding:3rem 1rem;color:#e8eaf6;font-size:14px;">
+  ⟡ No se encontraron juegos con esos filtros.
+</div>""", unsafe_allow_html=True)
+else:
+    st.markdown(f"""
+<div style="display:flex;align-items:center;gap:12px;margin-bottom:0.5rem;">
+  <span class="tdm-section-title" style="margin-bottom:0;">▸ Explora {len(df)} juegos</span>
+  <span style="font-size:11px;color:#e8eaf6;font-family:'Orbitron',monospace;text-shadow:0 1px 8px rgba(0,0,0,0.5);">{len(df)} TÍTULOS</span>
+</div>""", unsafe_allow_html=True)
+
+    try:
+        st.markdown(_cat_row_html("⟡", "Nuestra selección para ti", df.sample(n=min(20, len(df)))), unsafe_allow_html=True)
+
+        top10 = df.nlargest(10, "pct_pos_total")
+        st.markdown(_cat_row_html("◆", "Top 10 Mejor Valorados", top10), unsafe_allow_html=True)
+
+        try:
+            recientes = df.sort_values("release_date", ascending=False).head(15)
+        except:
+            recientes = df.head(15)
+        st.markdown(_cat_row_html("▸", "Recién Llegados", recientes), unsafe_allow_html=True)
+
+        gratis = df[df["price"] == 0].head(15)
+        if len(gratis) >= 3:
+            st.markdown(_cat_row_html("Gratis", "Juegos Gratis", gratis), unsafe_allow_html=True)
+
+        aburrimiento = df.nlargest(10, "average_playtime_forever")
+        st.markdown(_cat_row_html("▲", "Para aniquilar el aburrimiento", aburrimiento), unsafe_allow_html=True)
+
+        calidad = df[df["pct_pos_total"] >= 85].nsmallest(10, "price")
+        if len(calidad) >= 3:
+            st.markdown(_cat_row_html("★", "Mejor relación calidad-precio", calidad), unsafe_allow_html=True)
+
+        populares = df.nlargest(10, "num_reviews_total")
+        st.markdown(_cat_row_html("⟐", "Más Populares", populares), unsafe_allow_html=True)
+
+        criticos = df[df["metacritic_score"] >= 80].nlargest(10, "metacritic_score")
+        if len(criticos) >= 3:
+            st.markdown(_cat_row_html("⬡", "Recomendados por la crítica", criticos), unsafe_allow_html=True)
+
+        indies = df[df["genres"].str.contains("Indie", na=False, case=False)].nlargest(15, "pct_pos_total")
+        if len(indies) >= 3:
+            st.markdown(_cat_row_html("⊡", "Indies Imperdibles", indies), unsafe_allow_html=True)
+
+        descuento = df[df["discount"] > 0].head(15)
+        if len(descuento) >= 3:
+            st.markdown(_cat_row_html("⏷", "En Descuento", descuento), unsafe_allow_html=True)
+    except Exception as e:
+        st.error(f"Error al cargar categorías: {e}")
+
+
+st.markdown('<div class="tdm-divider"></div>', unsafe_allow_html=True)
 st.markdown("""
 <div class="tdm-tech">
   <div class="tdm-tech-label">⟡ STACK TECNOLÓGICO</div>
@@ -344,7 +562,7 @@ st.components.v1.html("""
     var W, H, CX, CY;
 
     function resize() {
-      var dpr = 2;
+      var dpr = Math.min(win.devicePixelRatio || 1, 2);
       W = win.innerWidth * dpr;
       H = win.innerHeight * dpr;
       canvas.width = W; canvas.height = H;
@@ -363,7 +581,7 @@ st.components.v1.html("""
       var angle = Math.random() * Math.PI * 2;
       var dist = 30 + Math.random() * Math.min(W, H) * 0.45;
       var orbitSpeed = (0.3 + Math.random() * 1.2) * (Math.random() > 0.5 ? 1 : -1);
-      var size = 2 + Math.random() * 4;
+      var size = 0.5 + Math.random() * 1.5;
       var colors = ['#f06292', '#7c6af5', '#26c6da', '#a99cf5', '#e8eaf6'];
       var col = colors[Math.floor(Math.random() * colors.length)];
       return {
@@ -376,13 +594,13 @@ st.components.v1.html("""
 
     function initParticles() {
       particles = [];
-      for (var i = 0; i < 500; i++) particles.push(spawnParticle());
+      for (var i = 0; i < 400; i++) particles.push(spawnParticle());
     }
 
     var stars = [];
     function initStars() {
       stars = [];
-      for (var i = 0; i < 100; i++) {
+      for (var i = 0; i < 60; i++) {
         stars.push({
           x: Math.random() * W, y: Math.random() * H,
           r: 0.5 + Math.random() * 1.5,
@@ -406,12 +624,7 @@ st.components.v1.html("""
     });
 
     function draw() {
-      var bg = ctx.createRadialGradient(CX, CY * 0.7, 0, CX, CY * 0.7, Math.max(W, H) * 0.6);
-      bg.addColorStop(0, '#0f1225');
-      bg.addColorStop(0.5, '#0b0e1a');
-      bg.addColorStop(1, '#060810');
-      ctx.fillStyle = bg;
-      ctx.fillRect(0, 0, W, H);
+      ctx.clearRect(0, 0, W, H);
 
       var t = Date.now() / 1000;
       for (var i = 0; i < stars.length; i++) {
@@ -462,7 +675,7 @@ st.components.v1.html("""
         var py = CY + Math.sin(p.angle) * p.dist * 0.5 + p.baseY;
 
         p.trail.push({ x: px, y: py });
-        if (p.trail.length > 8) p.trail.shift();
+        if (p.trail.length > 3) p.trail.shift();
 
         for (var j = 0; j < p.trail.length; j++) {
           var a = (j / p.trail.length) * 0.25;
@@ -472,7 +685,7 @@ st.components.v1.html("""
           ctx.fill();
         }
 
-        ctx.shadowBlur = 12;
+        ctx.shadowBlur = 1.5;
         ctx.shadowColor = p.color;
         ctx.fillStyle = p.color;
         ctx.beginPath();
@@ -574,87 +787,29 @@ st.components.v1.html("""
     }
 
     // ══════════════════════════════════════════════════════════════════════
-    // CARRUSEL
+    // CATEGORY ROWS — per-track scroll arrows
     // ══════════════════════════════════════════════════════════════════════
-    var track = doc.getElementById('carouselTrack');
-    var prevBtn = doc.getElementById('carouselPrev');
-    var nextBtn = doc.getElementById('carouselNext');
-    var dotsContainer = doc.getElementById('carouselDots');
+    doc.querySelectorAll('.cat-wrapper').forEach(function(wrapper) {
+      var track = wrapper.querySelector('.cat-track');
+      var leftArrow = wrapper.querySelector('.cat-arrow-left');
+      var rightArrow = wrapper.querySelector('.cat-arrow-right');
+      if (!track) return;
 
-    if (track) {
-      var autoInterval, hovering = false;
-      var visibleCount = 3;
-
-      function updateDots() {
-        if (!dotsContainer) return;
-        var scrollLeft = track.scrollLeft;
-        var totalWidth = track.scrollWidth - track.clientWidth;
-        var dots = dotsContainer.querySelectorAll('.carousel-dot');
-        if (dots.length <= 1) return;
-        var pageSize = totalWidth / (dots.length - 1);
-        var activeIdx = Math.round(scrollLeft / pageSize);
-        activeIdx = Math.max(0, Math.min(dots.length - 1, activeIdx));
-        dots.forEach(function(d, i) {
-          d.classList.toggle('active', i === activeIdx);
-        });
+      function scrollBy(dir) {
+        var cardEl = track.querySelector('.game-card');
+        var w = cardEl ? cardEl.offsetWidth + 16 : 260;
+        track.scrollLeft += dir * w * 4;
       }
 
-      function startAutoPlay() {
-        if (autoInterval) clearInterval(autoInterval);
-        autoInterval = setInterval(function() {
-          if (hovering) return;
-          var maxScroll = track.scrollWidth - track.clientWidth;
-          var cardEl = track.querySelector('.game-card');
-          var cw = cardEl ? cardEl.offsetWidth + 20 : 300;
-          var nextPos = track.scrollLeft + cw * visibleCount;
-          if (nextPos >= maxScroll - 5) nextPos = 0;
-          track.scrollLeft = nextPos;
-          updateDots();
-        }, 4000);
-      }
-
-      track.addEventListener('mouseenter', function() { hovering = true; });
-      track.addEventListener('mouseleave', function() { hovering = false; });
-
-      if (prevBtn) prevBtn.addEventListener('click', function() {
-        var cw = track.querySelector('.game-card');
-        var w = cw ? cw.offsetWidth + 20 : 300;
-        track.scrollLeft -= w * visibleCount; updateDots();
-      });
-      if (nextBtn) nextBtn.addEventListener('click', function() {
-        var cw = track.querySelector('.game-card');
-        var w = cw ? cw.offsetWidth + 20 : 300;
-        track.scrollLeft += w * visibleCount; updateDots();
-      });
-
-      track.addEventListener('scroll', updateDots);
-
-      if (dotsContainer) {
-        dotsContainer.addEventListener('click', function(e) {
-          var dot = e.target;
-          if (!dot.classList.contains('carousel-dot')) return;
-          var idx = parseInt(dot.getAttribute('data-index'), 10);
-          if (isNaN(idx)) return;
-          var totalWidth = track.scrollWidth - track.clientWidth;
-          var dots = dotsContainer.querySelectorAll('.carousel-dot');
-          var pageSize = totalWidth / (dots.length - 1);
-          track.scrollLeft = idx * pageSize;
-          updateDots();
-        });
-      }
-
-      setTimeout(startAutoPlay, 2000);
-    }
+      if (leftArrow) leftArrow.addEventListener('click', function() { scrollBy(-1); });
+      if (rightArrow) rightArrow.addEventListener('click', function() { scrollBy(1); });
+    });
 
     // ══════════════════════════════════════════════════════════════════════
-    // STAGGER ENTRY + TILT 3D + CLICK + COUNTERS
+    // STAGGER (CSS native via --i) + TILT 3D + CLICK + COUNTERS
     // ══════════════════════════════════════════════════════════════════════
     doc.querySelectorAll('.game-card, .info-card').forEach(function(card, i) {
-      card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-      setTimeout(function() {
-        card.style.opacity = '1';
-        card.style.transform = 'translateY(0)';
-      }, 400 + i * 60);
+      card.style.setProperty('--i', i);
     });
 
     doc.querySelectorAll('.game-card, .info-card').forEach(function(card) {
