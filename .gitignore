@@ -48,3 +48,11 @@ Thumbs.db
 
 .env
 AGENTS.md
+
+# ==========================================================
+# REGISTROS GENERADOS POR EL SCRAPER
+# Se generan localmente durante cada ejecución.
+# ==========================================================
+
+data/logs/
+data/reviews_extra.json.tmp
