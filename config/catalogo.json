@@ -1,0 +1,66 @@
+{
+  "version": "1.0",
+  "descripcion": "Catalogo oficial de videojuegos para The Data Machine.",
+  "juegos": [
+    {
+      "orden": 1,
+      "appid": 570,
+      "nombre": "Dota 2",
+      "activo": true
+    },
+    {
+      "orden": 2,
+      "appid": 252490,
+      "nombre": "Rust",
+      "activo": true
+    },
+    {
+      "orden": 3,
+      "appid": 1172470,
+      "nombre": "Apex Legends™",
+      "activo": true
+    },
+    {
+      "orden": 4,
+      "appid": 292030,
+      "nombre": "The Witcher 3: Wild Hunt",
+      "activo": true
+    },
+    {
+      "orden": 5,
+      "appid": 1245620,
+      "nombre": "ELDEN RING",
+      "activo": true
+    },
+    {
+      "orden": 6,
+      "appid": 413150,
+      "nombre": "Stardew Valley",
+      "activo": true
+    },
+    {
+      "orden": 7,
+      "appid": 739630,
+      "nombre": "Phasmophobia",
+      "activo": true
+    },
+    {
+      "orden": 8,
+      "appid": 945360,
+      "nombre": "Among Us",
+      "activo": true
+    },
+    {
+      "orden": 9,
+      "appid": 236390,
+      "nombre": "War Thunder",
+      "activo": true
+    },
+    {
+      "orden": 10,
+      "appid": 367520,
+      "nombre": "Hollow Knight",
+      "activo": true
+    }
+  ]
+}

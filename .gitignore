@@ -1,6 +1,50 @@
+# ==========================================================
+# ARCHIVOS DE DATOS
+# Los datasets no se suben al repositorio porque son pesados.
+# ==========================================================
+
 data/processed/dataset_limpio.csv
 data/raw/games_march2025_cleaned.csv
 data/reviews_extra.json
+
+
+# ==========================================================
+# ENTORNOS VIRTUALES DE PYTHON
+# Cada integrante debe crear su propio entorno local.
+# ==========================================================
+
+.venv/
+venv/
+
+
+# ==========================================================
+# ARCHIVOS GENERADOS AUTOMÁTICAMENTE POR PYTHON
+# No forman parte del código fuente del proyecto.
+# ==========================================================
+
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+
+# ==========================================================
+# ARCHIVOS TEMPORALES DE JUPYTER
+# ==========================================================
+
+.ipynb_checkpoints/
+
+
+# ==========================================================
+# ARCHIVOS DEL SISTEMA OPERATIVO
+# ==========================================================
+
+.DS_Store
+Thumbs.db
+
+
+# ==========================================================
+# ARCHIVOS LOCALES O DE CONFIGURACIÓN PRIVADA
+# ==========================================================
+
+.env
 AGENTS.md
-.venv
-venv
