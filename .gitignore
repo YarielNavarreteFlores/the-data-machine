@@ -56,3 +56,10 @@ AGENTS.md
 
 data/logs/
 data/reviews_extra.json.tmp
+
+# ==========================================================
+# RESULTADOS GENERADOS POR EL PIPELINE NLP
+# Se vuelven a generar a partir de reviews_extra.json.
+# ==========================================================
+
+data/processed/nlp/
