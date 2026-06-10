@@ -1,4 +1,7 @@
 import unittest
+import warnings
+
+from bs4 import MarkupResemblesLocatorWarning
 
 from src.scraper import (
     combinar_reviews,
@@ -28,6 +31,49 @@ class TestScraper(unittest.TestCase):
         self.assertEqual(
             texto,
             "Great game & fun",
+        )
+
+    def test_limpiar_texto_que_parece_url(self):
+        """
+        Comprueba que un texto parecido a una URL
+        no genere MarkupResemblesLocatorWarning.
+
+        Algunas reseñas pueden comenzar con enlaces,
+        pero siguen siendo texto válido para el NLP.
+        """
+        texto_original = (
+            "https://example.com is useful &amp; safe"
+        )
+
+        with warnings.catch_warnings(
+            record=True
+        ) as advertencias:
+
+            warnings.simplefilter(
+                "always"
+            )
+
+            resultado = limpiar_texto_html(
+                texto_original
+            )
+
+        self.assertEqual(
+            resultado,
+            "https://example.com is useful & safe",
+        )
+
+        advertencias_beautifulsoup = [
+            advertencia
+            for advertencia in advertencias
+            if issubclass(
+                advertencia.category,
+                MarkupResemblesLocatorWarning,
+            )
+        ]
+
+        self.assertEqual(
+            len(advertencias_beautifulsoup),
+            0,
         )
 
     def test_normalizar_review_api(self):

@@ -7,6 +7,7 @@ import logging
 import sys
 import time
 from datetime import datetime, timezone
+from html import unescape
 from pathlib import Path
 from typing import Any, Iterable
 
@@ -155,29 +156,55 @@ def limpiar_texto_html(
     texto: str | None,
 ) -> str:
     """
-    Convierte posibles etiquetas HTML a texto plano.
+    Limpia texto procedente de Steam.
 
-    BeautifulSoup retira etiquetas y entidades HTML.
-    Después se eliminan saltos y espacios repetidos.
+    Cuando el contenido tiene etiquetas HTML reales,
+    BeautifulSoup las convierte a texto plano.
 
-    Esta limpieza es ligera porque VADER necesita conservar
-    signos, palabras completas y estructura emocional.
+    Cuando el contenido ya es texto normal, no se envía
+    a BeautifulSoup. Esto evita advertencias cuando una
+    reseña comienza con una URL o se parece a una ruta web.
+
+    También se convierten entidades HTML como:
+        &amp;  -> &
+        &quot; -> "
     """
-    if not texto:
+    if texto is None:
         return ""
 
-    soup = BeautifulSoup(
-        str(texto),
-        "html.parser",
+    contenido = str(texto).strip()
+
+    if not contenido:
+        return ""
+
+    # BeautifulSoup solo se utiliza cuando el contenido
+    # parece contener etiquetas HTML reales.
+    contiene_html = (
+        "<" in contenido
+        and ">" in contenido
     )
 
-    texto_plano = soup.get_text(
-        separator=" ",
-        strip=True,
-    )
+    if contiene_html:
+        soup = BeautifulSoup(
+            contenido,
+            "html.parser",
+        )
 
+        contenido_limpio = soup.get_text(
+            separator=" ",
+            strip=True,
+        )
+
+    else:
+        # Convierte entidades HTML sin intentar interpretar
+        # el texto como una página o dirección web.
+        contenido_limpio = unescape(
+            contenido
+        )
+
+    # Elimina saltos de línea y espacios repetidos.
     return " ".join(
-        texto_plano.split()
+        contenido_limpio.split()
     )
 
 
