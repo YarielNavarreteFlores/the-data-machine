@@ -1,0 +1,36 @@
+# ==========================================================
+# CONFIGURACIÓN VISUAL Y DE PRODUCCIÓN — THE DATA MACHINE
+# ==========================================================
+
+[client]
+# Oculta la navegación técnica automática:
+# app, analisis, homepage y login.
+showSidebarNavigation = false
+
+# Reduce las opciones técnicas visibles en la barra superior.
+toolbarMode = "minimal"
+
+# En el navegador se muestra la traza, pero los detalles completos
+# siguen disponibles en la terminal para depuración.
+showErrorDetails = "stacktrace"
+
+# Evita enlaces externos de ayuda en las pantallas de error.
+showErrorLinks = false
+
+
+[server]
+# Requerido para ejecución en servidores sin interfaz gráfica.
+headless = true
+
+
+[browser]
+# No envía estadísticas de uso de esta ejecución.
+gatherUsageStats = false
+
+
+[theme]
+base = "dark"
+primaryColor = "#7C6AF5"
+backgroundColor = "#0B0E1A"
+secondaryBackgroundColor = "#15192B"
+textColor = "#F0F2FF"

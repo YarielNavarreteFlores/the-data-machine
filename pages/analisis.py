@@ -28,6 +28,10 @@ from src.dashboard import (
     parsear_lista_texto,
 )
 
+from src.menu_usuario import (
+    renderizar_menu_usuario,
+)
+
 from src.navigation import (
     consumir_appid_query,
     establecer_juego,
@@ -50,6 +54,11 @@ st.set_page_config(
 # Evita que una persona sin sesión entre directamente
 # al dashboard mediante su dirección URL.
 requerir_autenticacion()
+
+# Muestra el catálogo, el análisis actual y el cierre de sesión.
+renderizar_menu_usuario(
+    pagina_actual="analisis",
+)
 
 # CSS local de esta página. No se modifica src/styles.py,
 # porque ese archivo pertenece al diseño compartido del equipo.

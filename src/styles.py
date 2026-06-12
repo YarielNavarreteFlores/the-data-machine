@@ -35,7 +35,30 @@ html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
     content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 0;
     background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.025) 2px, rgba(0,0,0,0.025) 4px);
 }
-#MainMenu, footer, header { visibility: hidden; }
+/* Oculta únicamente elementos técnicos que no necesita el usuario.
+   No se oculta todo el header porque ahí vive el botón que abre
+   la barra lateral cuando está colapsada. */
+#MainMenu,
+footer {
+    visibility: hidden;
+}
+
+/* Mantiene disponible el encabezado de Streamlit, pero transparente. */
+header[data-testid="stHeader"] {
+    visibility: visible !important;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+/* Compatibilidad con distintas versiones de Streamlit. */
+[data-testid="stSidebarCollapsedControl"],
+[data-testid="stSidebarCollapseButton"] {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    z-index: 1000000 !important;
+}
 
 /* ── Header ── */
 .tdm-topbar {

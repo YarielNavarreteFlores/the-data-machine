@@ -7,6 +7,9 @@ from pathlib import Path
 import pandas as pd
 import streamlit as st
 
+from src.menu_usuario import (
+    renderizar_menu_usuario,
+)
 from src.navigation import (
     establecer_juego,
     requerir_autenticacion,
@@ -27,6 +30,11 @@ st.set_page_config(
 # Impide acceder al catálogo sin una sesión iniciada.
 # Si el usuario no está autenticado, se redirige al login.
 requerir_autenticacion()
+
+# Muestra únicamente la navegación autorizada y el logout.
+renderizar_menu_usuario(
+    pagina_actual="homepage",
+)
 
 # ── CSS ───────────────────────────────────────────────────────────────────────
 st.markdown(BASE_CSS + """
@@ -658,7 +666,7 @@ st.markdown("""
 <div class="tdm-hero">
   <div class="tdm-hero-eyebrow">⟡ La Máquina de Datos</div>
   <div class="tdm-hero-title">
-    Millones de reseñas.<br>
+    5,000 reseñas recientes.<br>
     <span class="tdm-hero-grad">Una máquina para entenderlas todas.</span>
   </div>
   <div class="tdm-hero-sub">5,000 reseñas recientes · 10 videojuegos · VADER · TF-IDF · Dashboard interactivo</div>
