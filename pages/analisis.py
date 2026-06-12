@@ -27,6 +27,13 @@ from src.dashboard import (
     obtener_datos_juego,
     parsear_lista_texto,
 )
+
+from src.navigation import (
+    consumir_appid_query,
+    establecer_juego,
+    requerir_autenticacion,
+)
+
 from src.styles import BASE_CSS
 
 
@@ -39,6 +46,10 @@ st.set_page_config(
     page_icon="◈",
     layout="wide",
 )
+
+# Evita que una persona sin sesión entre directamente
+# al dashboard mediante su dirección URL.
+requerir_autenticacion()
 
 # CSS local de esta página. No se modifica src/styles.py,
 # porque ese archivo pertenece al diseño compartido del equipo.
@@ -200,7 +211,18 @@ appid_por_nombre = {
 # RESOLUCIÓN DEL JUEGO SELECCIONADO
 # ==========================================================
 
-appid_sesion = st.session_state.get("selected_appid")
+# También permite abrir directamente:
+# http://localhost:8501/?appid=570
+appid_query = consumir_appid_query(
+    appids_validos=appids_disponibles,
+    limpiar_url=True,
+)
+
+appid_sesion = (
+    appid_query
+    if appid_query is not None
+    else st.session_state.get("selected_appid")
+)
 
 # Compatibilidad temporal con el homepage actual, que todavía
 # utiliza selected_game. En el Bloque 5 se estandarizará appid.
@@ -214,11 +236,17 @@ if appid_sesion not in appids_disponibles:
 col_regresar, col_selector = st.columns([1, 3])
 
 with col_regresar:
-    if st.button("← Volver al catálogo", use_container_width=True):
-        try:
-            st.switch_page("pages/homepage.py")
-        except Exception:
-            st.info("Abre la aplicación desde: streamlit run app.py")
+    if st.button(
+        "← Volver al catálogo",
+        use_container_width=True,
+    ):
+        # Elimina parámetros anteriores para evitar que
+        # la Homepage vuelva a abrir automáticamente el análisis.
+        st.query_params.clear()
+
+        st.switch_page(
+            "pages/homepage.py"
+        )
 
 with col_selector:
     appid_seleccionado = st.selectbox(
@@ -228,8 +256,12 @@ with col_selector:
         format_func=lambda appid: nombre_por_appid.get(appid, str(appid)),
     )
 
-st.session_state["selected_appid"] = int(appid_seleccionado)
-st.session_state["selected_game"] = nombre_por_appid[int(appid_seleccionado)]
+establecer_juego(
+    appid=int(appid_seleccionado),
+    nombre=nombre_por_appid[
+        int(appid_seleccionado)
+    ],
+)
 
 datos = obtener_datos_juego(
     appid=int(appid_seleccionado),

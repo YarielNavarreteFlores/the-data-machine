@@ -1,16 +1,32 @@
-import streamlit as st
-import pandas as pd
-import ast
-import math
-import random
+from __future__ import annotations
 
+import ast
+import json
+from pathlib import Path
+
+import pandas as pd
+import streamlit as st
+
+from src.navigation import (
+    establecer_juego,
+    requerir_autenticacion,
+)
 from src.styles import BASE_CSS
 
-st.set_page_config(page_title="The Data Machine", page_icon="🎮", layout="wide")
 
-if "authenticated" not in st.session_state or not st.session_state["authenticated"]:
-    st.warning("Inicia sesión para ver el catálogo.")
-    st.stop()
+st.set_page_config(
+    page_title="The Data Machine",
+    page_icon="🎮",
+    layout="wide",
+
+    # La navegación principal del proyecto es personalizada.
+    # La barra lateral comienza colapsada, pero su flecha se conserva.
+    initial_sidebar_state="collapsed",
+)
+
+# Impide acceder al catálogo sin una sesión iniciada.
+# Si el usuario no está autenticado, se redirige al login.
+requerir_autenticacion()
 
 # ── CSS ───────────────────────────────────────────────────────────────────────
 st.markdown(BASE_CSS + """
@@ -186,65 +202,272 @@ st.markdown(BASE_CSS + """
     box-shadow: 0 0 12px rgba(124,106,245,0.3) !important;
 }
 .game-card-img { height: 200px !important; }
+
+/* ── Botones reales de Streamlit para abrir cada análisis ── */
+div[data-testid="stButton"] > button {
+    width: 100%;
+    min-height: 40px;
+    margin-top: -2px;
+    margin-bottom: 12px;
+    border-radius: 0 0 12px 12px;
+    border: 1px solid rgba(124,106,245,0.55);
+    background: linear-gradient(
+        90deg,
+        rgba(124,106,245,0.18),
+        rgba(38,198,218,0.10)
+    );
+    color: #f0f2ff;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    transition: all 0.2s ease;
+}
+
+div[data-testid="stButton"] > button:hover {
+    border-color: #7c6af5;
+    background: linear-gradient(
+        90deg,
+        rgba(124,106,245,0.34),
+        rgba(38,198,218,0.22)
+    );
+    box-shadow: 0 0 18px rgba(124,106,245,0.28);
+    color: #ffffff;
+}
+
+/* Conserva visible la flecha que abre la barra lateral colapsada. */
+[data-testid="stSidebarCollapsedControl"] {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
 </style>
 """, unsafe_allow_html=True)
 
 
 # ── Datos ─────────────────────────────────────────────────────────────────────
-@st.cache_data
-def load_catalog(path: str = "data/processed/dataset_limpio.csv") -> pd.DataFrame:
-    try:
-        df = pd.read_csv(path)
-        _ = df["name"]
-    except (FileNotFoundError, KeyError):
-        df = pd.DataFrame({
-            "name": ["Hollow Knight", "Elden Ring", "Stardew Valley", "Cyberpunk 2077", "Subnautica", "Hades", "Deep Rock Galactic", "Terraria", "Portal 2", "Celeste"],
-            "header_image": [
-                "https://cdn.cloudflare.steamstatic.com/steam/apps/367520/header.jpg",
-                "https://cdn.cloudflare.steamstatic.com/steam/apps/1245620/header.jpg",
-                "https://cdn.cloudflare.steamstatic.com/steam/apps/413150/header.jpg",
-                "https://cdn.cloudflare.steamstatic.com/steam/apps/1091500/header.jpg",
-                "https://cdn.cloudflare.steamstatic.com/steam/apps/264710/header.jpg",
-                "https://cdn.cloudflare.steamstatic.com/steam/apps/1145360/header.jpg",
-                "https://cdn.cloudflare.steamstatic.com/steam/apps/548430/header.jpg",
-                "https://cdn.cloudflare.steamstatic.com/steam/apps/105600/header.jpg",
-                "https://cdn.cloudflare.steamstatic.com/steam/apps/620/header.jpg",
-                "https://cdn.cloudflare.steamstatic.com/steam/apps/504230/header.jpg",
-            ],
-            "price": [14.99, 59.99, 14.99, 29.99, 0.0, 24.99, 29.99, 9.99, 9.99, 19.99],
-            "pct_pos_total": [92, 96, 98, 76, 94, 97, 98, 97, 99, 99],
-            "tags": ["Metroidvania,Indie,Difficult", "Souls-like,Action RPG,Dark Fantasy", "Farming Sim,Relaxing,RPG", "Open World,Cyberpunk,Action", "Survival,Exploration,Underwater", "Roguelike,Action,Mythology", "Co-op,Shooter,Space", "Sandbox,Adventure,2D", "Puzzle,Co-op,Sci-fi", "Platformer,Indie,Difficult"],
-            "metacritic_score": [87, 96, 89, 76, 87, 93, 85, 83, 95, 94],
-            "estimated_owners": ["2M-5M", "5M-10M", "10M-20M", "10M-20M", "5M-10M", "5M-10M", "5M-10M", "30M-50M", "10M-20M", "2M-5M"],
-            "release_date": ["2017-02-24", "2022-02-25", "2016-02-26", "2020-12-10", "2018-01-23", "2020-09-17", "2018-02-28", "2011-05-16", "2011-04-19", "2018-01-25"],
-            "genres": ["['Action','Indie','Metroidvania']", "['Action','RPG','Dark Fantasy']", "['Indie','Simulation','RPG']", "['Action','RPG','Open World']", "['Adventure','Indie','Survival']", "['Action','Indie','Roguelike']", "['Action','Co-op','Shooter']", "['Adventure','Indie','Sandbox']", "['Puzzle','Co-op','Sci-fi']", "['Indie','Platformer']"],
-            "discount": [0, 0, 33, 0, 0, 25, 0, 50, 0, 0],
-            "average_playtime_forever": [5230, 14580, 38920, 8720, 6120, 24190, 18750, 67120, 3150, 2380],
-            "average_playtime_2weeks": [85, 120, 320, 45, 210, 180, 360, 150, 0, 95],
-            "num_reviews_total": [158000, 567000, 420000, 523000, 185000, 312000, 289000, 890000, 218000, 105000],
-        })
 
-    if "display_tags" not in df.columns:
-        if "genres" in df.columns:
-            def _parse(g):
-                try:
-                    if pd.notna(g) and len(str(g)) > 3:
-                        p = ast.literal_eval(str(g))
-                        if isinstance(p, list):
-                            return ", ".join(p)
-                except:
-                    pass
-                return ""
-            df["display_tags"] = df["genres"].apply(_parse)
-        elif "tags" in df.columns:
-            df["display_tags"] = df["tags"].astype(str)
-        else:
-            df["display_tags"] = ""
-    if "release_date" not in df.columns:
-        df["release_date"] = "2000-01-01"
-    if "genres" not in df.columns:
-        df["genres"] = ""
+# ==========================================================
+# RUTAS Y COLUMNAS DEL CATÁLOGO OFICIAL
+# ==========================================================
+
+RAIZ_PROYECTO = Path(__file__).resolve().parents[1]
+
+RUTA_DATASET = (
+    RAIZ_PROYECTO
+    / "data"
+    / "processed"
+    / "dataset_limpio.csv"
+)
+
+RUTA_CATALOGO = (
+    RAIZ_PROYECTO
+    / "config"
+    / "catalogo.json"
+)
+
+COLUMNAS_HOMEPAGE = {
+    "appid",
+    "name",
+    "header_image",
+    "price",
+    "pct_pos_total",
+    "genres",
+    "tags",
+    "metacritic_score",
+    "estimated_owners",
+    "release_date",
+    "discount",
+    "average_playtime_forever",
+    "average_playtime_2weeks",
+    "num_reviews_total",
+}
+
+
+@st.cache_data(show_spinner=False)
+def load_catalog() -> pd.DataFrame:
+    """
+    Carga solamente los 10 videojuegos activos definidos
+    en config/catalogo.json.
+
+    El dataset original nunca se modifica. Solo se leen las
+    columnas necesarias para construir la Homepage.
+    """
+    if not RUTA_DATASET.exists():
+        raise FileNotFoundError(
+            f"No se encontró el dataset: {RUTA_DATASET}"
+        )
+
+    if not RUTA_CATALOGO.exists():
+        raise FileNotFoundError(
+            f"No se encontró el catálogo: {RUTA_CATALOGO}"
+        )
+
+    # ------------------------------------------------------
+    # Leer el catálogo oficial
+    # ------------------------------------------------------
+
+    with RUTA_CATALOGO.open(
+        "r",
+        encoding="utf-8",
+    ) as archivo:
+        contenido_catalogo = json.load(archivo)
+
+    juegos_activos = [
+        juego
+        for juego in contenido_catalogo.get("juegos", [])
+        if juego.get("activo", True)
+    ]
+
+    if not juegos_activos:
+        raise ValueError(
+            "config/catalogo.json no contiene juegos activos."
+        )
+
+    appids_catalogo = [
+        int(juego["appid"])
+        for juego in juegos_activos
+    ]
+
+    orden_catalogo = {
+        int(juego["appid"]): int(juego["orden"])
+        for juego in juegos_activos
+    }
+
+    # ------------------------------------------------------
+    # Leer únicamente las columnas necesarias
+    # ------------------------------------------------------
+
+    df = pd.read_csv(
+        RUTA_DATASET,
+        usecols=lambda columna: (
+            columna in COLUMNAS_HOMEPAGE
+        ),
+        low_memory=False,
+    )
+
+    columnas_faltantes = sorted(
+        COLUMNAS_HOMEPAGE.difference(df.columns)
+    )
+
+    if columnas_faltantes:
+        raise ValueError(
+            "Faltan columnas para construir la Homepage: "
+            + ", ".join(columnas_faltantes)
+        )
+
+    # ------------------------------------------------------
+    # Filtrar exclusivamente los 10 appids oficiales
+    # ------------------------------------------------------
+
+    df["appid"] = pd.to_numeric(
+        df["appid"],
+        errors="coerce",
+    )
+
+    df = df[
+        df["appid"].isin(appids_catalogo)
+    ].copy()
+
+    df["appid"] = df["appid"].astype("int64")
+
+    df = df.drop_duplicates(
+        subset="appid",
+        keep="first",
+    )
+
+    appids_encontrados = set(
+        df["appid"].tolist()
+    )
+
+    appids_faltantes = sorted(
+        set(appids_catalogo).difference(
+            appids_encontrados
+        )
+    )
+
+    if appids_faltantes:
+        raise ValueError(
+            "Los siguientes appids no existen en el dataset: "
+            + ", ".join(map(str, appids_faltantes))
+        )
+
+    # ------------------------------------------------------
+    # Normalizar columnas numéricas
+    # ------------------------------------------------------
+
+    columnas_numericas = [
+        "price",
+        "pct_pos_total",
+        "metacritic_score",
+        "discount",
+        "average_playtime_forever",
+        "average_playtime_2weeks",
+        "num_reviews_total",
+    ]
+
+    for columna in columnas_numericas:
+        df[columna] = pd.to_numeric(
+            df[columna],
+            errors="coerce",
+        ).fillna(0)
+
+    # ------------------------------------------------------
+    # Preparar etiquetas visibles
+    # ------------------------------------------------------
+
+    def parsear_generos(valor: object) -> str:
+        """Convierte la lista de géneros a texto legible."""
+        if valor is None:
+            return ""
+
+        if isinstance(valor, float) and pd.isna(valor):
+            return ""
+
+        texto = str(valor).strip()
+
+        if not texto:
+            return ""
+
+        try:
+            generos = ast.literal_eval(texto)
+
+            if isinstance(generos, list):
+                return ", ".join(
+                    str(genero).strip()
+                    for genero in generos
+                    if str(genero).strip()
+                )
+
+        except (ValueError, SyntaxError):
+            pass
+
+        return texto
+
+    df["display_tags"] = (
+        df["genres"]
+        .apply(parsear_generos)
+    )
+
+    # ------------------------------------------------------
+    # Ordenar como fue definido en catalogo.json
+    # ------------------------------------------------------
+
+    df["catalog_order"] = (
+        df["appid"]
+        .map(orden_catalogo)
+    )
+
+    df = df.sort_values(
+        "catalog_order"
+    ).reset_index(drop=True)
+
+    if len(df) != len(appids_catalogo):
+        raise ValueError(
+            "El número de juegos cargados no coincide "
+            "con el catálogo oficial."
+        )
+
     return df
+
 
 def sentiment_label(pct):
     if pct >= 85: return '<span class="rating-pill r-pos">Muy positivo</span>'
@@ -275,42 +498,146 @@ def get_all_genres(df: pd.DataFrame) -> list:
 
 
 def _game_card_html(row):
+    """
+    Construye únicamente la parte visual de una tarjeta.
+
+    La navegación no se realiza con enlaces HTML ni JavaScript.
+    El botón Streamlit se agrega después de esta tarjeta.
+    """
+    appid = int(row["appid"])
     name = row["name"]
     img = row.get("header_image", "")
     tags = row.get("display_tags", "")
     pct = row["pct_pos_total"]
     price = row["price"]
     mc = row.get("metacritic_score", "—")
-    t = "".join(f'<span class="game-tag">{s.strip()}</span>' for s in tags.split(",")[:3] if s.strip())
+
+    etiquetas = "".join(
+        f'<span class="game-tag">{tag.strip()}</span>'
+        for tag in str(tags).split(",")[:3]
+        if tag.strip()
+    )
+
     return f"""
-<div class="game-card" data-game="{name}">
+<div class="game-card" data-appid="{appid}">
   <div class="game-card-inner">
-    <img class="game-card-img" src="{img}" onerror="this.src='https://via.placeholder.com/300x200/0b0e1a/7c6af5?text=TDM'" alt="{name}"/>
+    <img
+      class="game-card-img"
+      src="{img}"
+      onerror="this.src='https://via.placeholder.com/300x200/0b0e1a/7c6af5?text=TDM'"
+      alt="{name}"
+    />
     <div class="game-card-body">
-      <div class="game-tags">{t}</div>
+      <div class="game-tags">{etiquetas}</div>
       <div class="game-card-title">{name}</div>
-      <div class="game-meta">{sentiment_label(pct)} {price_display(price)}</div>
-      <div style="font-size:10px;color:#e8eaf6;margin-top:5px;font-family:'Orbitron',monospace;text-shadow:0 1px 8px rgba(0,0,0,0.5);">&#11088; {pct}% · METACORE {mc}</div>
+      <div class="game-meta">
+        {sentiment_label(pct)}
+        {price_display(price)}
+      </div>
+      <div style="
+        font-size:10px;
+        color:#e8eaf6;
+        margin-top:5px;
+        font-family:'Orbitron',monospace;
+        text-shadow:0 1px 8px rgba(0,0,0,0.5);
+      ">
+        &#11088; {pct}% · METACORE {mc}
+      </div>
     </div>
   </div>
-</div>"""
+</div>
+"""
 
 
-def _cat_row_html(icon, title, games, max_cards=20):
-    games = games.head(max_cards)
-    cards = "".join(_game_card_html(row) for _, row in games.iterrows())
-    return f"""
-<div class="cat-row">
-  <div class="cat-title">{icon} {title}</div>
-  <div class="cat-wrapper">
-    <button class="cat-arrow cat-arrow-left">&#8249;</button>
-    <div class="cat-track">{cards}</div>
-    <button class="cat-arrow cat-arrow-right">&#8250;</button>
-  </div>
-</div>"""
+def abrir_analisis(
+    appid: int,
+    nombre: str,
+) -> None:
+    """
+    Guarda la selección en la sesión actual y abre el dashboard.
+
+    Al usar st.button + st.switch_page no se recarga el navegador
+    completo, por lo que la autenticación permanece activa.
+    """
+    establecer_juego(
+        appid=int(appid),
+        nombre=str(nombre),
+    )
+
+    st.switch_page(
+        "pages/analisis.py"
+    )
+
+
+def renderizar_categoria(
+    icono: str,
+    titulo: str,
+    juegos: pd.DataFrame,
+    clave_categoria: str,
+    max_juegos: int = 10,
+    columnas_por_fila: int = 4,
+) -> None:
+    """
+    Renderiza una categoría mediante componentes Streamlit.
+
+    Cada tarjeta incluye un botón real. Esto evita perder la sesión,
+    problema que ocurría al usar enlaces HTML con href.
+    """
+    juegos = juegos.head(max_juegos).reset_index(drop=True)
+
+    if juegos.empty:
+        return
+
+    st.markdown(
+        f'<div class="cat-title">{icono} {titulo}</div>',
+        unsafe_allow_html=True,
+    )
+
+    for inicio in range(
+        0,
+        len(juegos),
+        columnas_por_fila,
+    ):
+        fila = juegos.iloc[
+            inicio:inicio + columnas_por_fila
+        ]
+
+        columnas = st.columns(
+            columnas_por_fila,
+            gap="small",
+        )
+
+        for indice_columna, columna in enumerate(columnas):
+            if indice_columna >= len(fila):
+                continue
+
+            juego = fila.iloc[indice_columna]
+            appid = int(juego["appid"])
+            nombre = str(juego["name"])
+
+            with columna:
+                st.markdown(
+                    _game_card_html(juego),
+                    unsafe_allow_html=True,
+                )
+
+                if st.button(
+                    "Ver análisis →",
+                    key=(
+                        f"abrir_{clave_categoria}_"
+                        f"{inicio}_{appid}"
+                    ),
+                    use_container_width=True,
+                ):
+                    abrir_analisis(
+                        appid=appid,
+                        nombre=nombre,
+                    )
 
 
 df = load_catalog()
+
+
 
 st.markdown('<!-- tdm-page --><div class="tdm-page">', unsafe_allow_html=True)
 
@@ -334,7 +661,7 @@ st.markdown("""
     Millones de reseñas.<br>
     <span class="tdm-hero-grad">Una máquina para entenderlas todas.</span>
   </div>
-  <div class="tdm-hero-sub">+21M reseñas · VADER · TF-IDF · Dashboard interactivo · Descarga CSV/PNG</div>
+  <div class="tdm-hero-sub">5,000 reseñas recientes · 10 videojuegos · VADER · TF-IDF · Dashboard interactivo</div>
   <div class="tdm-scroll"><span class="tdm-scroll-arrow">⟡</span></div>
 </div>
 """, unsafe_allow_html=True)
@@ -348,8 +675,8 @@ st.markdown(f"""
     <div class="tdm-stat-lbl">Juegos analizados</div>
   </div>
   <div class="tdm-stat-item">
-    <div class="tdm-stat-num" data-count="21000000">21M+</div>
-    <div class="tdm-stat-lbl">Reseñas procesadas</div>
+    <div class="tdm-stat-num" data-count="5000">5,000</div>
+    <div class="tdm-stat-lbl">Reseñas recientes analizadas</div>
   </div>
   <div class="tdm-stat-item">
     <div class="tdm-stat-num">VADER</div>
@@ -365,7 +692,7 @@ st.markdown(f"""
 # ── ¿Qué es? ──────────────────────────────────────────────────────────────────
 st.markdown("""
 <div class="tdm-section-title">▸ ¿Qué es The Data Machine?</div>
-<div class="tdm-section-sub">Procesamos millones de reseñas de Steam con NLP. Sentimiento, temas y métricas de un vistazo.</div>
+<div class="tdm-section-sub">Procesamos 5,000 reseñas recientes de Steam con NLP. Sentimiento, temas y métricas de un vistazo.</div>
 """, unsafe_allow_html=True)
 
 info_cols = st.columns(3)
@@ -389,20 +716,72 @@ st.markdown('<div class="tdm-divider"></div>', unsafe_allow_html=True)
 
 
 # ── Featured game ──────────────────────────────────────────────────────────────
-featured = df.sample(1).iloc[0]
-ftags = "".join(f'<span class="game-tag">{t.strip()}</span>' for t in str(featured.get("display_tags", "")).split(",")[:3])
-st.markdown(f"""
-<div class="tdm-featured" data-game="{featured['name']}">
-  <img src="{featured['header_image']}" onerror="this.src='https://via.placeholder.com/600x320/0b0e1a/7c6af5?text=⟡'" alt="">
+featured = df.sample(
+    n=1,
+    random_state=2026,
+).iloc[0]
+
+featured_appid = int(
+    featured["appid"]
+)
+
+featured_nombre = str(
+    featured["name"]
+)
+
+ftags = "".join(
+    f'<span class="game-tag">{tag.strip()}</span>'
+    for tag in str(
+        featured.get(
+            "display_tags",
+            "",
+        )
+    ).split(",")[:3]
+    if tag.strip()
+)
+
+st.markdown(
+    f"""
+<div class="tdm-featured" data-appid="{featured_appid}">
+  <img
+    src="{featured['header_image']}"
+    onerror="this.src='https://via.placeholder.com/600x320/0b0e1a/7c6af5?text=⟡'"
+    alt="{featured_nombre}"
+  >
   <div class="tdm-featured-overlay"></div>
   <div class="tdm-featured-body">
-    <div class="tdm-featured-label">⟡ JUEGO DESTACADO</div>
-    <div class="tdm-featured-title">{featured['name']}</div>
-    <div style="display:flex;gap:6px;margin:4px 0;">{ftags}</div>
-    <div style="color:#e8eaf6;font-size:13px;text-shadow:0 1px 8px rgba(0,0,0,0.4);">★ {featured['pct_pos_total']}% positivo · {price_display(featured['price'])}</div>
-    <span class="tdm-featured-btn">Ver análisis →</span>
+    <div class="tdm-featured-label">
+      ⟡ JUEGO DESTACADO
+    </div>
+    <div class="tdm-featured-title">
+      {featured_nombre}
+    </div>
+    <div style="display:flex;gap:6px;margin:4px 0;">
+      {ftags}
+    </div>
+    <div style="
+      color:#e8eaf6;
+      font-size:13px;
+      text-shadow:0 1px 8px rgba(0,0,0,0.4);
+    ">
+      ★ {featured['pct_pos_total']}% positivo ·
+      {price_display(featured['price'])}
+    </div>
   </div>
-</div>""", unsafe_allow_html=True)
+</div>
+""",
+    unsafe_allow_html=True,
+)
+
+if st.button(
+    f"Ver análisis de {featured_nombre} →",
+    key=f"abrir_destacado_{featured_appid}",
+    use_container_width=True,
+):
+    abrir_analisis(
+        appid=featured_appid,
+        nombre=featured_nombre,
+    )
 
 
 st.markdown('<div class="tdm-divider"></div>', unsafe_allow_html=True)
@@ -462,7 +841,13 @@ if filters_active:
   <span class="tdm-section-title" style="margin-bottom:0;font-size:25px;">▸ Resultados</span>
   <span style="font-size:11px;color:#e8eaf6;font-family:'Orbitron',monospace;text-shadow:0 1px 8px rgba(0,0,0,0.5);">{len(filtered)} COINCIDENCIAS</span>
 </div>""", unsafe_allow_html=True)
-        st.markdown(_cat_row_html("", f"Resultados ({len(filtered)})", filtered, 50), unsafe_allow_html=True)
+        renderizar_categoria(
+            icono="",
+            titulo=f"Resultados ({len(filtered)})",
+            juegos=filtered,
+            clave_categoria="resultados",
+            max_juegos=50,
+        )
     else:
         st.markdown("""
 <div style="text-align:center;padding:3rem 1rem;color:#e8eaf6;font-size:14px;">
@@ -476,42 +861,95 @@ else:
 </div>""", unsafe_allow_html=True)
 
     try:
-        st.markdown(_cat_row_html("⟡", "Nuestra selección para ti", df.sample(n=min(20, len(df)))), unsafe_allow_html=True)
+        renderizar_categoria(
+            icono="⟡",
+            titulo="Nuestra selección para ti",
+            juegos=df.sample(
+                n=min(10, len(df)),
+                random_state=2026,
+            ),
+            clave_categoria="seleccion",
+        )
 
         top10 = df.nlargest(10, "pct_pos_total")
-        st.markdown(_cat_row_html("◆", "Top 10 Mejor Valorados", top10), unsafe_allow_html=True)
+        renderizar_categoria(
+            icono="◆",
+            titulo="Top 10 Mejor Valorados",
+            juegos=top10,
+            clave_categoria="top",
+        )
 
         try:
             recientes = df.sort_values("release_date", ascending=False).head(15)
         except:
             recientes = df.head(15)
-        st.markdown(_cat_row_html("▸", "Recién Llegados", recientes), unsafe_allow_html=True)
+        renderizar_categoria(
+            icono="▸",
+            titulo="Recién Llegados",
+            juegos=recientes,
+            clave_categoria="recientes",
+        )
 
         gratis = df[df["price"] == 0].head(15)
         if len(gratis) >= 3:
-            st.markdown(_cat_row_html("Gratis", "Juegos Gratis", gratis), unsafe_allow_html=True)
+            renderizar_categoria(
+                icono="Gratis",
+                titulo="Juegos Gratis",
+                juegos=gratis,
+                clave_categoria="gratis",
+            )
 
         aburrimiento = df.nlargest(10, "average_playtime_forever")
-        st.markdown(_cat_row_html("▲", "Para aniquilar el aburrimiento", aburrimiento), unsafe_allow_html=True)
+        renderizar_categoria(
+            icono="▲",
+            titulo="Para aniquilar el aburrimiento",
+            juegos=aburrimiento,
+            clave_categoria="aburrimiento",
+        )
 
         calidad = df[df["pct_pos_total"] >= 85].nsmallest(10, "price")
         if len(calidad) >= 3:
-            st.markdown(_cat_row_html("★", "Mejor relación calidad-precio", calidad), unsafe_allow_html=True)
+            renderizar_categoria(
+                icono="★",
+                titulo="Mejor relación calidad-precio",
+                juegos=calidad,
+                clave_categoria="calidad",
+            )
 
         populares = df.nlargest(10, "num_reviews_total")
-        st.markdown(_cat_row_html("⟐", "Más Populares", populares), unsafe_allow_html=True)
+        renderizar_categoria(
+            icono="⟐",
+            titulo="Más Populares",
+            juegos=populares,
+            clave_categoria="populares",
+        )
 
         criticos = df[df["metacritic_score"] >= 80].nlargest(10, "metacritic_score")
         if len(criticos) >= 3:
-            st.markdown(_cat_row_html("⬡", "Recomendados por la crítica", criticos), unsafe_allow_html=True)
+            renderizar_categoria(
+                icono="⬡",
+                titulo="Recomendados por la crítica",
+                juegos=criticos,
+                clave_categoria="critica",
+            )
 
         indies = df[df["genres"].str.contains("Indie", na=False, case=False)].nlargest(15, "pct_pos_total")
         if len(indies) >= 3:
-            st.markdown(_cat_row_html("⊡", "Indies Imperdibles", indies), unsafe_allow_html=True)
+            renderizar_categoria(
+                icono="⊡",
+                titulo="Indies Imperdibles",
+                juegos=indies,
+                clave_categoria="indies",
+            )
 
         descuento = df[df["discount"] > 0].head(15)
         if len(descuento) >= 3:
-            st.markdown(_cat_row_html("⏷", "En Descuento", descuento), unsafe_allow_html=True)
+            renderizar_categoria(
+                icono="⏷",
+                titulo="En Descuento",
+                juegos=descuento,
+                clave_categoria="descuento",
+            )
     except Exception as e:
         st.error(f"Error al cargar categorías: {e}")
 
@@ -826,21 +1264,8 @@ st.components.v1.html("""
       });
     });
 
-    doc.querySelectorAll('.game-card').forEach(function(card) {
-      card.addEventListener('click', function() {
-        var g = card.getAttribute('data-game');
-        if (!g) return;
-        win.location.href = win.location.origin + win.location.pathname + '?game=' + encodeURIComponent(g);
-      });
-    });
-
-    doc.querySelectorAll('.tdm-featured').forEach(function(card) {
-      card.addEventListener('click', function() {
-        var g = card.getAttribute('data-game');
-        if (!g) return;
-        win.location.href = win.location.origin + win.location.pathname + '?game=' + encodeURIComponent(g);
-      });
-    });
+    // La navegación utiliza st.button + st.switch_page.
+    // Este script conserva exclusivamente animaciones visuales.
 
     doc.querySelectorAll('.tdm-stat-num[data-count]').forEach(function(el) {
       var target = parseInt(el.getAttribute('data-count'), 10);
