@@ -1,217 +1,347 @@
 <div align="center">
 
-```
-████████╗██╗  ██╗███████╗    ██████╗  █████╗ ████████╗ █████╗ 
-╚══██╔══╝██║  ██║██╔════╝    ██╔══██╗██╔══██╗╚══██╔══╝██╔══██╗
-   ██║   ███████║█████╗      ██║  ██║███████║   ██║   ███████║
-   ██║   ██╔══██║██╔══╝      ██║  ██║██╔══██║   ██║   ██╔══██║
-   ██║   ██║  ██║███████╗    ██████╔╝██║  ██║   ██║   ██║  ██║
-   ╚═╝   ╚═╝  ╚═╝╚══════╝    ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝
-███╗   ███╗ █████╗  ██████╗██╗  ██╗██╗███╗   ██╗███████╗
-████╗ ████║██╔══██╗██╔════╝██║  ██║██║████╗  ██║██╔════╝
-██╔████╔██║███████║██║     ███████║██║██╔██╗ ██║█████╗  
-██║╚██╔╝██║██╔══██║██║     ██╔══██║██║██║╚██╗██║██╔══╝  
-██║ ╚═╝ ██║██║  ██║╚██████╗██║  ██║██║██║ ╚████║███████╗
-╚═╝     ╚═╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝╚══════╝
-```
+# THE DATA MACHINE
 
-### 🎮 Análisis de reseñas de videojuegos con NLP · La máquina de datos
+### Análisis de reseñas de videojuegos con NLP
 
-![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)
-![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)
-![Pandas](https://img.shields.io/badge/Pandas-150458?style=for-the-badge&logo=pandas&logoColor=white)
-![scikit--learn](https://img.shields.io/badge/scikit--learn-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white)
-![Plotly](https://img.shields.io/badge/Plotly-3F4F75?style=for-the-badge&logo=plotly&logoColor=white)
-![NLTK](https://img.shields.io/badge/NLTK-VADER-154360?style=for-the-badge&logoColor=white)
+[![Python](https://img.shields.io/badge/Python-3.12-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![Streamlit](https://img.shields.io/badge/Streamlit-1.58-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)](https://streamlit.io/)
+[![Tests](https://img.shields.io/badge/tests-33%20passed-2EA44F?style=for-the-badge)](#calidad-y-pruebas)
+[![Status](https://img.shields.io/badge/status-deployed-7C6AF5?style=for-the-badge)](https://the-data-machine-01.streamlit.app/)
 
-![Status](https://img.shields.io/badge/STATUS-EN%20DESARROLLO-yellow?style=for-the-badge)
-![Semestre](https://img.shields.io/badge/SEMESTRE-IV-purple?style=for-the-badge)
-![IPN](https://img.shields.io/badge/IPN-ESCOM%20%2F%20-8B0000?style=for-the-badge)
+**ESCOM - Instituto Politécnico Nacional · Licenciatura en Ciencia de Datos · DAAD · 4AV1**
+
+[Aplicación web](https://the-data-machine-01.streamlit.app/) · [Arquitectura](docs/ARQUITECTURA.md) · [Resultados](docs/RESULTADOS_Y_LIMITACIONES.md) · [Guía de demo](docs/GUIA_DEMO.md)
 
 </div>
 
 ---
 
-## ⚔️ ¿Qué es The Data Machine?
+## Descripción
 
-> *"Millones de reseñas. Cero tiempo para leerlas. Una máquina para entenderlas todas."*
+**The Data Machine** es una aplicación web que resume la opinión de la comunidad de Steam mediante análisis de sentimiento, extracción de términos relevantes y visualizaciones interactivas.
 
-**The Data Machine** es una aplicación web de análisis de reseñas de videojuegos. A partir de un dataset real de Steam con millones de opiniones, la app clasifica el sentimiento de la comunidad, detecta los temas más recurrentes y lo presenta todo en un dashboard interactivo — sin que el usuario tenga que leer ni una sola reseña.
+El proyecto combina dos escalas de información:
 
-El usuario inicia sesión, elige su juego del catálogo y obtiene en segundos:
+- **Contexto histórico:** el dataset limpio contiene 10,348 videojuegos y métricas agregadas que representan 41,407,431 reseñas históricas.
+- **Análisis textual detallado:** el pipeline procesa 5,000 reseñas individuales recientes, distribuidas en 10 videojuegos con 500 reseñas por título.
 
-- 📊 **¿La comunidad lo ama o lo odia?** — gráfica de sentimiento positivo / negativo / neutral
-- ☁️ **¿De qué habla la gente?** — nube de palabras con los términos más frecuentes
-- 🏷️ **¿Qué temas se repiten?** — bugs, historia, precio, multijugador... lo que más menciona la gente
-- ⬇️ **¿Quieres los datos?** — descarga el análisis completo en CSV o la gráfica en PNG
+Los 10 juegos seleccionados representan 8,854,428 reseñas históricas en Steam. El modelo NLP no procesa esos 8.85 millones de textos; utiliza sus métricas agregadas como contexto y analiza en detalle la muestra reciente de 5,000 opiniones.
+
+> **Millones de opiniones históricas. 5,000 reseñas recientes analizadas en detalle.**
 
 ---
 
-## 🗺️ Mapa del Proyecto
+## Aplicación desplegada
 
+**URL pública:** https://the-data-machine-01.streamlit.app/
+
+Flujo de uso:
+
+1. Iniciar sesión con un usuario y una contraseña no vacíos.
+2. Seleccionar uno de los 10 videojuegos del catálogo.
+3. Consultar sentimiento, métricas, temas TF-IDF, tags de Steam, nube de palabras y reseñas.
+4. Filtrar y descargar resultados.
+5. Cerrar sesión desde el menú lateral.
+
+> El login es demostrativo y utiliza `st.session_state`; no constituye un sistema de autenticación persistente.
+
+---
+
+## Alcance implementado
+
+| Elemento | Resultado |
+|---|---:|
+| Videojuegos activos | 10 |
+| Reseñas recientes procesadas | 5,000 |
+| Reseñas por videojuego | 500 |
+| Términos TF-IDF | 150 |
+| Tags de Steam | 150 |
+| Reseñas históricas de los 10 juegos | 8,854,428 |
+| Pruebas automatizadas | 33 |
+| Entorno de producción | Python 3.12 + Streamlit Community Cloud |
+
+Videojuegos incluidos:
+
+`Dota 2`, `Rust`, `Apex Legends`, `The Witcher 3: Wild Hunt`, `ELDEN RING`, `Stardew Valley`, `Phasmophobia`, `Among Us`, `War Thunder` y `Hollow Knight`.
+
+---
+
+## Funcionalidades
+
+- Catálogo visual con portada, géneros, precio, Metacritic y aprobación histórica.
+- Scraper de reseñas recientes de Steam con paginación, pausas, reintentos y deduplicación.
+- Clasificación de sentimiento con VADER: positivo, neutral y negativo.
+- Evaluación binaria de VADER contra `voted_up` para reseñas no neutrales.
+- Accuracy, balanced accuracy, precision, recall, F1, cobertura y baseline mayoritario.
+- Extracción de términos con TF-IDF usando unigramas y bigramas.
+- Comparación con tags comunitarios de Steam.
+- Nube de palabras por videojuego.
+- Explorador de reseñas con filtros por sentimiento, recomendación y texto.
+- Descarga de reseñas filtradas en CSV y métricas en JSON.
+- Navegación multipágina y cierre de sesión.
+- Paquete compacto de producción con manifiesto y hashes SHA-256.
+
+---
+
+## Metodología
+
+El proyecto sigue las seis fases de **CRISP-DM**:
+
+1. **Entendimiento del negocio:** condensar grandes volúmenes de opiniones en información útil.
+2. **Entendimiento de los datos:** auditar el dataset y distinguir metadata agregada de reseñas individuales.
+3. **Preparación:** fijar el catálogo, obtener reseñas recientes, limpiar y deduplicar.
+4. **Modelamiento:** VADER para sentimiento y TF-IDF para términos dominantes.
+5. **Evaluación:** comparar VADER con `voted_up`, medir cobertura y contrastar con baseline.
+6. **Despliegue:** construir la app Streamlit y publicar un paquete reproducible en Community Cloud.
+
+---
+
+## Arquitectura
+
+```mermaid
+flowchart LR
+    A[dataset_limpio.csv\nmetadata histórica] --> B[config/catalogo.json\n10 appids]
+    C[Steam Reviews] --> D[src/scraper.py]
+    D --> E[reviews_extra.json]
+    E --> F[src/nlp.py\nVADER + TF-IDF]
+    B --> F
+    A --> G[src/production.py]
+    F --> G
+    G --> H[data/production\npaquete compacto]
+    H --> I[src/dashboard.py]
+    I --> J[Streamlit\nLogin - Homepage - Análisis]
+    J --> K[Streamlit Community Cloud]
 ```
-📁 the-data-machine/
-├── 🚀 app.py                        ← Punto de entrada de Streamlit
-├── 📋 requirements.txt              ← Dependencias del proyecto
-├── 📖 README.md                     ← Este archivo
-│
-├── 📁 data/
-│   ├── raw/                         ← Dataset original de Kaggle (sin tocar)
-│   └── processed/                   ← Dataset limpio listo para análisis
-│
-├── 📁 notebooks/
-│   ├── 01_eda.ipynb                 ← Exploración inicial del dataset
-│   ├── 02_sentimiento.ipynb         ← Prototipo análisis de sentimiento
-│   └── 03_temas.ipynb               ← Prototipo extracción de temas TF-IDF
-│
-├── 📁 src/
-│   ├── auth.py                      ← Login y manejo de sesión
-│   ├── data_loader.py               ← Carga y filtrado del dataset
-│   └── nlp.py                       ← Sentimiento (VADER) + temas (TF-IDF)
-│
-└── 📁 pages/
-    ├── 1_Login.py                   ← Pantalla de inicio de sesión
-    ├── 2_Homepage.py                ← Catálogo de videojuegos
-    └── 3_Analisis.py                ← Dashboard de análisis
+
+La explicación completa se encuentra en [`docs/ARQUITECTURA.md`](docs/ARQUITECTURA.md).
+
+---
+
+## Estructura del repositorio
+
+```text
+the-data-machine/
+├── .streamlit/config.toml
+├── app.py
+├── requirements.txt
+├── README.md
+├── config/
+│   └── catalogo.json
+├── data/
+│   ├── processed/
+│   │   └── preprocesamiento.py
+│   └── production/
+│       ├── catalogo_10_juegos.csv
+│       ├── reviews_analizadas.csv
+│       ├── metricas_sentimiento.json
+│       ├── temas_tfidf.csv
+│       ├── tags_steam.csv
+│       └── manifest.json
+├── notebooks/
+│   ├── 01_eda.ipynb
+│   ├── 02-vader.ipynb
+│   ├── 03_temas.ipynb
+│   └── 04_homepage_guide.ipynb
+├── pages/
+│   ├── login.py
+│   ├── homepage.py
+│   └── analisis.py
+├── scripts/
+│   ├── verificar_base.py
+│   ├── preparar_datos_produccion.py
+│   ├── validar_bloque5c.py
+│   └── prueba_arranque_streamlit.py
+├── src/
+│   ├── scraper.py
+│   ├── nlp.py
+│   ├── dashboard.py
+│   ├── navigation.py
+│   ├── menu_usuario.py
+│   ├── data_paths.py
+│   ├── production.py
+│   └── styles.py
+└── tests/
+    ├── test_scraper.py
+    ├── test_nlp.py
+    ├── test_dashboard.py
+    ├── test_navigation.py
+    ├── test_menu_usuario.py
+    ├── test_production.py
+    └── test_deployment.py
 ```
 
 ---
 
-## 🎮 Pantallas de la App
+## Instalación local
 
-| Pantalla | Descripción |
-|----------|-------------|
-| 🔐 **Login** | Autenticación de usuario con manejo de sesión |
-| 🏠 **Homepage** | Catálogo visual de juegos con rating general de sentimiento |
-| 📊 **Dashboard** | Análisis completo: sentimiento, nube de palabras, temas y descarga |
+### Requisitos
 
----
+- Python 3.12
+- Git
+- Conexión a internet para instalar dependencias
 
-## 🛠️ Stack Tecnológico
+### Ejecución
 
-<div align="center">
-
-| Capa | Tecnología | Uso |
-|------|-----------|-----|
-| 🖥️ App Web | ![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=flat&logo=streamlit&logoColor=white) | Framework de la app web completa |
-| 📦 Datos | ![Pandas](https://img.shields.io/badge/Pandas-150458?style=flat&logo=pandas&logoColor=white) ![NumPy](https://img.shields.io/badge/NumPy-013243?style=flat&logo=numpy&logoColor=white) | Carga, limpieza y manipulación del dataset |
-| 🧠 NLP | ![NLTK](https://img.shields.io/badge/NLTK-VADER-154360?style=flat) | Análisis de sentimiento por reseña |
-| 🔍 Temas | ![scikit-learn](https://img.shields.io/badge/scikit--learn-F7931E?style=flat&logo=scikit-learn&logoColor=white) | Extracción de temas con TF-IDF |
-| 📊 Gráficas | ![Plotly](https://img.shields.io/badge/Plotly-3F4F75?style=flat&logo=plotly&logoColor=white) | Gráficas interactivas en el dashboard |
-| ☁️ Nube | ![WordCloud](https://img.shields.io/badge/WordCloud-8E44AD?style=flat) | Nube de palabras por videojuego |
-| 🔄 Versiones | ![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white) | Control de versiones y colaboración |
-| ☁️ Deploy | ![Streamlit Cloud](https://img.shields.io/badge/Streamlit_Cloud-FF4B4B?style=flat&logo=streamlit&logoColor=white) | Hosting gratuito de la app |
-
-</div>
-
----
-
-## 📡 Dataset
-
-El proyecto utiliza el dataset **Steam Reviews 2021** disponible públicamente en Kaggle:
-
-- 🔗 **Fuente:** [kaggle.com/datasets/najzeko/steam-reviews-2021](https://www.kaggle.com/datasets/najzeko/steam-reviews-2021)
-- 📊 **Contenido:** +21 millones de reseñas reales de usuarios de Steam
-- 🌐 **Idioma principal:** Inglés
-- 💰 **Costo:** Gratuito con cuenta de Kaggle
-
-**Columnas principales utilizadas:**
-
-| Columna | Descripción |
-|---------|-------------|
-| `app_name` | Nombre del videojuego |
-| `review` | Texto completo de la reseña (input del NLP) |
-| `voted_up` | Si el usuario recomendó el juego (True/False) |
-| `timestamp_created` | Fecha de la reseña |
-| `language` | Idioma de la reseña |
-
----
-
-## 🚀 Cómo Ejecutar el Proyecto
-
-**1. Clonar el repositorio**
 ```bash
 git clone https://github.com/MelSurikun/the-data-machine.git
 cd the-data-machine
+
+python -m venv .venv
 ```
 
-**2. Crear y activar entorno virtual**
+Windows PowerShell:
+
+```powershell
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+python -m streamlit run app.py
+```
+
+Linux/macOS:
+
 ```bash
-# Crear entorno
-python -m venv venv
-
-# Activar en Windows
-venv\Scripts\activate
-
-# Activar en Mac/Linux
-source venv/bin/activate
+source .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+python -m streamlit run app.py
 ```
 
-**3. Instalar dependencias**
-```bash
-pip install -r requirements.txt
-```
-
-**4. Descargar dataset**
-
-Descarga el dataset de Kaggle y colócalo en `data/raw/steam_reviews.csv`
-
-**5. Ejecutar la app**
-```bash
-streamlit run app.py
-```
-
-La app abre automáticamente en `http://localhost:8501` 🎮
+La aplicación estará disponible en `http://localhost:8501`.
 
 ---
 
-## 🌐 Demo en Vivo
+## Datos
 
-> 🚧 Disponible próximamente en Streamlit Community Cloud
+### Fuente maestra
+
+`dataset_limpio.csv` es el dataset depurado utilizado durante el desarrollo. Debido a su tamaño, no se incluye directamente en el repositorio.
+
+### Paquete de producción
+
+La aplicación desplegada utiliza `data/production/`, que contiene únicamente los 10 juegos y los resultados NLP necesarios. `manifest.json` registra:
+
+- appids incluidos;
+- número de filas;
+- tamaño en bytes;
+- hashes SHA-256;
+- hash del dataset fuente.
+
+Para regenerar el paquete desde las fuentes locales:
+
+```powershell
+python scripts/preparar_datos_produccion.py
+python scripts/validar_bloque5b.py
+```
 
 ---
 
-## 👾 Equipo
+## Calidad y pruebas
+
+Ejecutar las 33 pruebas:
+
+```powershell
+python -m unittest tests/test_scraper.py tests/test_nlp.py tests/test_dashboard.py tests/test_navigation.py tests/test_menu_usuario.py tests/test_production.py tests/test_deployment.py -v
+```
+
+Validación de despliegue:
+
+```powershell
+python scripts/validar_bloque5c.py
+python scripts/prueba_arranque_streamlit.py
+```
+
+Cobertura funcional de las pruebas:
+
+- normalización y combinación de reseñas;
+- clasificación y evaluación NLP;
+- carga y transformación del dashboard;
+- navegación y sesión;
+- menú y logout;
+- rutas y hashes de producción;
+- dependencias, codificación y arranque headless.
+
+---
+
+## Resultados y limitaciones
+
+En los 10 videojuegos, la evaluación binaria sobre las reseñas no neutrales obtuvo:
+
+- accuracy promedio: **80.4 %**;
+- balanced accuracy promedio: **72.6 %**;
+- cobertura no neutral promedio: **74.1 %**;
+- 7 de 10 juegos alcanzaron al menos 75 % de accuracy;
+- 4 de 10 juegos superaron el baseline mayoritario.
+
+Una accuracy elevada no implica necesariamente un modelo superior al baseline en juegos con clases altamente desbalanceadas. Los resultados completos y su interpretación están en [`docs/RESULTADOS_Y_LIMITACIONES.md`](docs/RESULTADOS_Y_LIMITACIONES.md).
+
+---
+
+## Limitaciones principales
+
+- El corpus textual detallado se limita a 500 reseñas recientes por juego.
+- VADER está optimizado para inglés y puede fallar con sarcasmo, jerga y contexto complejo.
+- La selección de reseñas recientes no representa necesariamente toda la historia del videojuego.
+- El login es demostrativo y no almacena credenciales ni perfiles.
+- La nube de palabras es descriptiva; no reemplaza una modelación temática avanzada.
+
+---
+
+## Trabajo futuro
+
+- Parametrizar juegos, número de reseñas y cantidad de temas.
+- Almacenar reseñas en Parquet o una base de datos por `appid` y fecha.
+- Incorporar procesamiento incremental y tareas en segundo plano.
+- Detectar idioma y añadir soporte para español.
+- Comparar VADER con modelos supervisados o Transformers.
+- Implementar autenticación real y roles.
+- Automatizar CI para pruebas y despliegue.
+
+---
+
+## Equipo
+
+| Integrante | Participación principal |
+|---|---|
+| **Hernández López Melanie** | Arquitectura inicial, ingesta/EDA, Homepage y colaboración en integración |
+| **Sojo Ponce Melina Valeria** | Login y sesión, prototipo de sentimiento y funciones de exportación |
+| **Navarrete Flores Yariel** | Preprocesamiento, scraper, TF-IDF, dashboard, pruebas, producción, despliegue y documentación técnica |
+
+---
+
+## Contexto académico
+
+- **Instituto Politécnico Nacional**
+- **Escuela Superior de Cómputo**
+- **Licenciatura en Ciencia de Datos**
+- **Unidad de aprendizaje:** Desarrollo de Aplicaciones para Análisis de Datos
+- **Grupo:** 4AV1
+- **Semestre:** cuarto semestre, 2026
+
+---
+
+## Documentación
+
+- [`docs/ARQUITECTURA.md`](docs/ARQUITECTURA.md)
+- [`docs/RESULTADOS_Y_LIMITACIONES.md`](docs/RESULTADOS_Y_LIMITACIONES.md)
+- [`docs/GUIA_DEMO.md`](docs/GUIA_DEMO.md)
+- [`docs/RELEASE_CHECKLIST.md`](docs/RELEASE_CHECKLIST.md)
+
+---
+
+## Referencias principales
+
+- Hutto, C. J., & Gilbert, E. (2014). *VADER: A Parsimonious Rule-based Model for Sentiment Analysis of Social Media Text*.
+- Scikit-learn. `TfidfVectorizer` documentation.
+- Streamlit documentation and Streamlit Community Cloud.
+- Valve/Steam Store endpoints utilizados para metadata y reseñas.
+- CRISP-DM 1.0: Step-by-step data mining guide.
+
+---
 
 <div align="center">
 
-| Avatar | Nombre | Rol en el Proyecto |
-|--------|--------|--------------------|
-| 👩‍💻 | **Melanie** | Arquitecta del Proyecto · Ingesta de Datos · Homepage · Integración |
-| 👩‍🔬 | **Melina** | Login & Auth · Análisis de Sentimiento (NLP) · Export |
-| 🧙‍♀️ | **Yariel** | Preprocesamiento · Extracción de Temas · Dashboard Visual |
-
-</div>
-
----
-
-## 📅 Cronograma
-
-```
-Sem 1  [28 Abr – 4 May]   ████░░░░░░░░   🔍 Investigación & Setup GitHub
-Sem 2  [5 May – 11 May]   ████████░░░░   📦 Ingesta & EDA del dataset
-Sem 3  [12 May – 18 May]  ████████████   🧠 Módulo NLP (sentimiento + temas)
-Sem 4  [19 May – 25 May]  ░░░░░░░░░░░░   🖥️ Desarrollo de la App Web
-Sem 5  [26 May – 1 Jun]   ░░░░░░░░░░░░   🔗 Integración & Deploy
-Sem 6  [2 Jun – 6 Jun]    ░░░░░░░░░░░░   🎓 Documentación & Entrega Final
-```
-
----
-
-## 📚 Contexto Académico
-
-```
-🏫 Instituto Politécnico Nacional
-🏢 ESCOM
-📖 Licenciatura en Ciencia de Datos
-📘 Unidad de Aprendizaje: Desarrollo de Aplicaciones para Análisis de Datos
-📅 Semestre IV · 2026
-```
-
----
-
-<div align="center">
-
-*Hecho con 🎮 y mucho café por el equipo La Máquina de Datos*
+**The Data Machine · ESCOM-IPN · 2026**
 
 </div>
