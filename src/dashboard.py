@@ -9,14 +9,22 @@ from typing import Any, Iterable
 import pandas as pd
 from wordcloud import WordCloud
 
+from src.data_paths import (
+    resolver_directorio_nlp,
+    resolver_ruta_metadata,
+)
 
 # ==========================================================
 # RUTAS DEL PROYECTO
 # ==========================================================
 
 RAIZ_PROYECTO = Path(__file__).resolve().parents[1]
-RUTA_DATASET = RAIZ_PROYECTO / "data" / "processed" / "dataset_limpio.csv"
-RUTA_NLP = RAIZ_PROYECTO / "data" / "processed" / "nlp"
+
+# En producción se utilizan los archivos compactos incluidos
+# en el repositorio. Localmente se mantiene compatibilidad
+# con dataset_limpio.csv y data/processed/nlp/.
+RUTA_DATASET = resolver_ruta_metadata()
+RUTA_NLP = resolver_directorio_nlp()
 RUTA_REVIEWS_ANALIZADAS = RUTA_NLP / "reviews_analizadas.csv"
 RUTA_METRICAS = RUTA_NLP / "metricas_sentimiento.json"
 RUTA_TEMAS = RUTA_NLP / "temas_tfidf.csv"

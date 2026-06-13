@@ -16,6 +16,9 @@ from src.navigation import (
 )
 from src.styles import BASE_CSS
 
+from src.data_paths import (
+    resolver_ruta_metadata,
+)
 
 st.set_page_config(
     page_title="The Data Machine",
@@ -259,12 +262,9 @@ div[data-testid="stButton"] > button:hover {
 
 RAIZ_PROYECTO = Path(__file__).resolve().parents[1]
 
-RUTA_DATASET = (
-    RAIZ_PROYECTO
-    / "data"
-    / "processed"
-    / "dataset_limpio.csv"
-)
+# Prioriza el catálogo compacto de producción.
+# Si todavía no existe, usa dataset_limpio.csv localmente.
+RUTA_DATASET = resolver_ruta_metadata()
 
 RUTA_CATALOGO = (
     RAIZ_PROYECTO

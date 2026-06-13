@@ -63,3 +63,13 @@ data/reviews_extra.json.tmp
 # ==========================================================
 
 data/processed/nlp/
+
+# ==========================================================
+# DATOS DE PRODUCCIÓN
+# Los archivos finales sí se incluyen en Git.
+# Solo se ignoran temporales de escritura atómica.
+# ==========================================================
+
+data/production/*.tmp
+!data/production/
+!data/production/**
