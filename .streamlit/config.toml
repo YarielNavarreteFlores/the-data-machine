@@ -1,0 +1,35 @@
+# ==========================================================
+# CONFIGURACIÓN DE PRODUCCIÓN — THE DATA MACHINE
+# ==========================================================
+
+[client]
+# La navegación técnica automática se reemplaza por el menú propio.
+showSidebarNavigation = false
+
+# Reduce las opciones técnicas visibles para el usuario final.
+toolbarMode = "minimal"
+
+# En producción, los detalles completos permanecen en los logs
+# y el navegador muestra únicamente un mensaje genérico.
+showErrorDetails = "none"
+
+# No muestra enlaces externos de ayuda en pantallas de error.
+showErrorLinks = false
+
+
+[server]
+# Requerido para servidores sin interfaz gráfica.
+headless = true
+
+
+[browser]
+# Desactiva el envío de estadísticas de uso de esta ejecución.
+gatherUsageStats = false
+
+
+[theme]
+base = "dark"
+primaryColor = "#7C6AF5"
+backgroundColor = "#0B0E1A"
+secondaryBackgroundColor = "#15192B"
+textColor = "#F0F2FF"

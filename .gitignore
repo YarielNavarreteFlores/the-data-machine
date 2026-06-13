@@ -1,6 +1,76 @@
+# ==========================================================
+# ARCHIVOS DE DATOS
+# Los datasets no se suben al repositorio porque son pesados.
+# ==========================================================
+
 data/processed/dataset_limpio.csv
 data/raw/games_march2025_cleaned.csv
 data/reviews_extra.json
+
+
+# ==========================================================
+# ENTORNOS VIRTUALES DE PYTHON
+# Cada integrante debe crear su propio entorno local.
+# ==========================================================
+
+.venv/
+venv/
+.venv-deploy/
+
+
+# ==========================================================
+# ARCHIVOS GENERADOS AUTOMÁTICAMENTE POR PYTHON
+# No forman parte del código fuente del proyecto.
+# ==========================================================
+
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+
+# ==========================================================
+# ARCHIVOS TEMPORALES DE JUPYTER
+# ==========================================================
+
+.ipynb_checkpoints/
+
+
+# ==========================================================
+# ARCHIVOS DEL SISTEMA OPERATIVO
+# ==========================================================
+
+.DS_Store
+Thumbs.db
+
+
+# ==========================================================
+# ARCHIVOS LOCALES O DE CONFIGURACIÓN PRIVADA
+# ==========================================================
+
+.env
 AGENTS.md
-.venv
-venv
+
+# ==========================================================
+# REGISTROS GENERADOS POR EL SCRAPER
+# Se generan localmente durante cada ejecución.
+# ==========================================================
+
+data/logs/
+data/reviews_extra.json.tmp
+
+# ==========================================================
+# RESULTADOS GENERADOS POR EL PIPELINE NLP
+# Se vuelven a generar a partir de reviews_extra.json.
+# ==========================================================
+
+data/processed/nlp/
+
+# ==========================================================
+# DATOS DE PRODUCCIÓN
+# Los archivos finales sí se incluyen en Git.
+# Solo se ignoran temporales de escritura atómica.
+# ==========================================================
+
+data/production/*.tmp
+!data/production/
+!data/production/**

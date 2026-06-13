@@ -1,0 +1,151 @@
+appid,game_name,tag,tag_votes,score_normalized
+570,Dota 2,Free to Play,59933,1.0
+570,Dota 2,MOBA,20158,0.336342
+570,Dota 2,Multiplayer,15359,0.25627
+570,Dota 2,Strategy,14252,0.237799
+570,Dota 2,e-sports,11780,0.196553
+570,Dota 2,Team-Based,10962,0.182904
+570,Dota 2,Competitive,8286,0.138254
+570,Dota 2,Action,7920,0.132148
+570,Dota 2,Online Co-Op,7464,0.124539
+570,Dota 2,PvP,6046,0.100879
+570,Dota 2,Difficult,5349,0.08925
+570,Dota 2,Co-op,4316,0.072014
+570,Dota 2,RTS,4110,0.068577
+570,Dota 2,RPG,3792,0.063271
+570,Dota 2,Tower Defense,3774,0.06297
+236390,War Thunder,Free to Play,6063,1.0
+236390,War Thunder,Simulation,6013,0.991753
+236390,War Thunder,Vehicular Combat,5097,0.840673
+236390,War Thunder,Combat,4770,0.786739
+236390,War Thunder,World War II,4013,0.661884
+236390,War Thunder,VR,3994,0.65875
+236390,War Thunder,Flight,3979,0.656276
+236390,War Thunder,War,3846,0.634339
+236390,War Thunder,Military,3841,0.633515
+236390,War Thunder,Tanks,3789,0.624938
+236390,War Thunder,Multiplayer,3697,0.609764
+236390,War Thunder,Naval Combat,3672,0.605641
+236390,War Thunder,Modern,3638,0.600033
+236390,War Thunder,Massively Multiplayer,3637,0.599868
+236390,War Thunder,Cold War,3599,0.593601
+252490,Rust,Survival,18592,1.0
+252490,Rust,Crafting,11822,0.635865
+252490,Rust,Multiplayer,11755,0.632261
+252490,Rust,Open World,11220,0.603485
+252490,Rust,Open World Survival Craft,8769,0.471654
+252490,Rust,Building,8354,0.449333
+252490,Rust,PvP,7651,0.411521
+252490,Rust,Sandbox,7238,0.389307
+252490,Rust,Adventure,5868,0.31562
+252490,Rust,First-Person,5355,0.288027
+252490,Rust,Action,4907,0.263931
+252490,Rust,Nudity,4793,0.257799
+252490,Rust,FPS,4749,0.255432
+252490,Rust,Shooter,3890,0.20923
+252490,Rust,Co-op,3826,0.205787
+292030,The Witcher 3: Wild Hunt,Open World,12704,1.0
+292030,The Witcher 3: Wild Hunt,RPG,10744,0.845718
+292030,The Witcher 3: Wild Hunt,Story Rich,9941,0.782509
+292030,The Witcher 3: Wild Hunt,Atmospheric,6852,0.539358
+292030,The Witcher 3: Wild Hunt,Mature,6780,0.53369
+292030,The Witcher 3: Wild Hunt,Fantasy,6537,0.514562
+292030,The Witcher 3: Wild Hunt,Adventure,6423,0.505589
+292030,The Witcher 3: Wild Hunt,Singleplayer,6228,0.490239
+292030,The Witcher 3: Wild Hunt,Nudity,6046,0.475913
+292030,The Witcher 3: Wild Hunt,Choices Matter,5754,0.452928
+292030,The Witcher 3: Wild Hunt,Great Soundtrack,4711,0.370828
+292030,The Witcher 3: Wild Hunt,Third Person,4677,0.368152
+292030,The Witcher 3: Wild Hunt,Medieval,4545,0.357761
+292030,The Witcher 3: Wild Hunt,Action,4392,0.345718
+292030,The Witcher 3: Wild Hunt,Multiple Endings,3940,0.310139
+367520,Hollow Knight,Metroidvania,5452,1.0
+367520,Hollow Knight,Souls-like,4227,0.775312
+367520,Hollow Knight,Platformer,4130,0.75752
+367520,Hollow Knight,Great Soundtrack,4019,0.737161
+367520,Hollow Knight,Difficult,3920,0.719002
+367520,Hollow Knight,2D,3917,0.718452
+367520,Hollow Knight,Indie,3688,0.676449
+367520,Hollow Knight,Singleplayer,3144,0.576669
+367520,Hollow Knight,Atmospheric,3081,0.565114
+367520,Hollow Knight,Exploration,3058,0.560895
+367520,Hollow Knight,Adventure,2805,0.51449
+367520,Hollow Knight,Story Rich,2729,0.50055
+367520,Hollow Knight,Hand-drawn,2075,0.380594
+367520,Hollow Knight,Multiple Endings,2015,0.369589
+367520,Hollow Knight,Action,2007,0.368122
+413150,Stardew Valley,Farming Sim,7706,1.0
+413150,Stardew Valley,Pixel Graphics,7169,0.930314
+413150,Stardew Valley,Multiplayer,7088,0.919803
+413150,Stardew Valley,Life Sim,7083,0.919154
+413150,Stardew Valley,RPG,6396,0.830003
+413150,Stardew Valley,Relaxing,6108,0.792629
+413150,Stardew Valley,Agriculture,5247,0.680898
+413150,Stardew Valley,Simulation,5198,0.674539
+413150,Stardew Valley,Crafting,4386,0.569167
+413150,Stardew Valley,Sandbox,4284,0.55593
+413150,Stardew Valley,Indie,4181,0.542564
+413150,Stardew Valley,Building,3535,0.458733
+413150,Stardew Valley,Singleplayer,3275,0.424994
+413150,Stardew Valley,Casual,3274,0.424864
+413150,Stardew Valley,Open World,3241,0.420581
+739630,Phasmophobia,Horror,4333,1.0
+739630,Phasmophobia,Online Co-Op,2889,0.666744
+739630,Phasmophobia,Multiplayer,2625,0.605816
+739630,Phasmophobia,Psychological Horror,2066,0.476806
+739630,Phasmophobia,Co-op,1812,0.418186
+739630,Phasmophobia,VR,1536,0.354489
+739630,Phasmophobia,Supernatural,1524,0.351719
+739630,Phasmophobia,First-Person,1409,0.325179
+739630,Phasmophobia,Investigation,1321,0.30487
+739630,Phasmophobia,Dark,1002,0.231249
+739630,Phasmophobia,Demons,932,0.215093
+739630,Phasmophobia,Detective,922,0.212786
+739630,Phasmophobia,Mystery,873,0.201477
+739630,Phasmophobia,Thriller,647,0.149319
+739630,Phasmophobia,3D,643,0.148396
+945360,Among Us,Multiplayer,1935,1.0
+945360,Among Us,Social Deduction,1333,0.688889
+945360,Among Us,Online Co-Op,1333,0.688889
+945360,Among Us,Space,1254,0.648062
+945360,Among Us,Survival,1039,0.536951
+945360,Among Us,2D,1011,0.522481
+945360,Among Us,Funny,974,0.503359
+945360,Among Us,Psychological,862,0.445478
+945360,Among Us,Party Game,846,0.437209
+945360,Among Us,Co-op,841,0.434625
+945360,Among Us,Cartoony,757,0.391214
+945360,Among Us,Local Multiplayer,740,0.382429
+945360,Among Us,Casual,694,0.358656
+945360,Among Us,Action,673,0.347804
+945360,Among Us,PvP,671,0.34677
+1172470,Apex Legends™,Free to Play,2170,1.0
+1172470,Apex Legends™,Battle Royale,1483,0.68341
+1172470,Apex Legends™,Multiplayer,1477,0.680645
+1172470,Apex Legends™,FPS,1442,0.664516
+1172470,Apex Legends™,Shooter,1350,0.62212
+1172470,Apex Legends™,First-Person,1099,0.506452
+1172470,Apex Legends™,PvP,931,0.429032
+1172470,Apex Legends™,Action,825,0.380184
+1172470,Apex Legends™,Hero Shooter,762,0.351152
+1172470,Apex Legends™,Team-Based,736,0.339171
+1172470,Apex Legends™,Tactical,556,0.256221
+1172470,Apex Legends™,Sci-fi,501,0.230876
+1172470,Apex Legends™,Survival,493,0.227189
+1172470,Apex Legends™,Loot,491,0.226267
+1172470,Apex Legends™,Co-op,475,0.218894
+1245620,ELDEN RING,Souls-like,6823,1.0
+1245620,ELDEN RING,Open World,4941,0.724168
+1245620,ELDEN RING,Dark Fantasy,4868,0.713469
+1245620,ELDEN RING,RPG,4617,0.676682
+1245620,ELDEN RING,Difficult,4500,0.659534
+1245620,ELDEN RING,Action RPG,3521,0.516049
+1245620,ELDEN RING,Third Person,3355,0.491719
+1245620,ELDEN RING,Multiplayer,3322,0.486883
+1245620,ELDEN RING,Fantasy,3175,0.465338
+1245620,ELDEN RING,Singleplayer,3066,0.449362
+1245620,ELDEN RING,Online Co-Op,2969,0.435146
+1245620,ELDEN RING,Action,2791,0.409058
+1245620,ELDEN RING,Co-op,2403,0.352191
+1245620,ELDEN RING,Atmospheric,2352,0.344716
+1245620,ELDEN RING,PvP,2332,0.341785

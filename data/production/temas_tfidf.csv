@@ -1,0 +1,151 @@
+appid,game_name,term,ngram_type,tfidf_score,score_normalized,document_frequency,document_pct
+570,Dota 2,best,unigram,0.04068627,1.0,27,5.4108
+570,Dota 2,dota,unigram,0.03622606,0.890375,48,9.6192
+570,Dota 2,nice,unigram,0.03496007,0.85926,18,3.6072
+570,Dota 2,fun,unigram,0.01777255,0.436819,22,4.4088
+570,Dota 2,life,unigram,0.01580019,0.388342,17,3.4068
+570,Dota 2,love,unigram,0.01559756,0.383362,14,2.8056
+570,Dota 2,it's,unigram,0.01500678,0.368841,27,5.4108
+570,Dota 2,toxic,unigram,0.01382596,0.339819,16,3.2064
+570,Dota 2,match,unigram,0.01305177,0.32079,19,3.8076
+570,Dota 2,awesome,unigram,0.01199347,0.294779,8,1.6032
+570,Dota 2,community,unigram,0.0113873,0.279881,20,4.008
+570,Dota 2,trash,unigram,0.01123437,0.276122,8,1.6032
+570,Dota 2,hard,unigram,0.01025486,0.252047,10,2.004
+570,Dota 2,better,unigram,0.0101936,0.250542,9,1.8036
+570,Dota 2,moba,unigram,0.00982458,0.241472,8,1.6032
+236390,War Thunder,fun,unigram,0.04679497,1.0,64,12.8
+236390,War Thunder,slop,unigram,0.03087495,0.659792,48,9.6
+236390,War Thunder,snail,unigram,0.02527101,0.540037,34,6.8
+236390,War Thunder,vehicles,unigram,0.02295055,0.490449,81,16.2
+236390,War Thunder,copy,unigram,0.0213434,0.456105,78,15.6
+236390,War Thunder,premium,unigram,0.01877323,0.40118,67,13.4
+236390,War Thunder,love,unigram,0.01839923,0.393188,25,5.0
+236390,War Thunder,war,unigram,0.01785617,0.381583,45,9.0
+236390,War Thunder,paste,unigram,0.0174421,0.372735,61,12.2
+236390,War Thunder,copy paste,bigram,0.0174421,0.372735,61,12.2
+236390,War Thunder,best,unigram,0.01706255,0.364624,17,3.4
+236390,War Thunder,thunder,unigram,0.01696217,0.362478,44,8.8
+236390,War Thunder,gaijin,unigram,0.01659606,0.354655,53,10.6
+236390,War Thunder,tanks,unigram,0.01645885,0.351723,46,9.2
+236390,War Thunder,money,unigram,0.01623979,0.347041,56,11.2
+252490,Rust,fun,unigram,0.05863081,1.0,53,10.6
+252490,Rust,best,unigram,0.03574951,0.609739,32,6.4
+252490,Rust,rust,unigram,0.02931614,0.500012,38,7.6
+252490,Rust,got,unigram,0.0290236,0.495023,40,8.0
+252490,Rust,hate,unigram,0.02263518,0.386063,20,4.0
+252490,Rust,love,unigram,0.02168453,0.369849,21,4.2
+252490,Rust,life,unigram,0.02136561,0.364409,28,5.6
+252490,Rust,want,unigram,0.02014157,0.343532,25,5.0
+252490,Rust,yes,unigram,0.01939263,0.330758,11,2.2
+252490,Rust,dont,unigram,0.01438506,0.24535,20,4.0
+252490,Rust,makes,unigram,0.01325395,0.226058,19,3.8
+252490,Rust,food,unigram,0.01320954,0.2253,15,3.0
+252490,Rust,base,unigram,0.01316395,0.224523,19,3.8
+252490,Rust,raided,unigram,0.01296071,0.221056,14,2.8
+252490,Rust,people,unigram,0.01288116,0.219699,18,3.6
+292030,The Witcher 3: Wild Hunt,best,unigram,0.08715788,1.0,95,19.0
+292030,The Witcher 3: Wild Hunt,masterpiece,unigram,0.0241717,0.277332,26,5.2
+292030,The Witcher 3: Wild Hunt,witcher,unigram,0.0234981,0.269604,46,9.2
+292030,The Witcher 3: Wild Hunt,it's,unigram,0.02302011,0.26412,35,7.0
+292030,The Witcher 3: Wild Hunt,story,unigram,0.02247207,0.257832,47,9.4
+292030,The Witcher 3: Wild Hunt,peak,unigram,0.02232455,0.256139,14,2.8
+292030,The Witcher 3: Wild Hunt,amazing,unigram,0.02200519,0.252475,25,5.0
+292030,The Witcher 3: Wild Hunt,world,unigram,0.02009058,0.230508,47,9.4
+292030,The Witcher 3: Wild Hunt,love,unigram,0.01941855,0.222797,21,4.2
+292030,The Witcher 3: Wild Hunt,rpg,unigram,0.01927727,0.221176,32,6.4
+292030,The Witcher 3: Wild Hunt,goat,unigram,0.01803328,0.206904,10,2.0
+292030,The Witcher 3: Wild Hunt,greatest,unigram,0.01639989,0.188163,14,2.8
+292030,The Witcher 3: Wild Hunt,fun,unigram,0.01465184,0.168107,21,4.2
+292030,The Witcher 3: Wild Hunt,years,unigram,0.01459539,0.167459,31,6.2
+292030,The Witcher 3: Wild Hunt,combat,unigram,0.01419215,0.162833,33,6.6
+367520,Hollow Knight,best,unigram,0.05263392,1.0,45,9.018
+367520,Hollow Knight,fun,unigram,0.04242409,0.806022,51,10.2204
+367520,Hollow Knight,peak,unigram,0.0385096,0.73165,25,5.01
+367520,Hollow Knight,hard,unigram,0.02784452,0.529022,31,6.2124
+367520,Hollow Knight,love,unigram,0.02477012,0.470611,36,7.2144
+367520,Hollow Knight,bugs,unigram,0.02276545,0.432524,17,3.4068
+367520,Hollow Knight,hollow,unigram,0.02046874,0.388889,31,6.2124
+367520,Hollow Knight,amazing,unigram,0.01944921,0.369519,25,5.01
+367520,Hollow Knight,it's,unigram,0.01694356,0.321913,27,5.4108
+367520,Hollow Knight,bug,unigram,0.01692928,0.321642,15,3.006
+367520,Hollow Knight,silksong,unigram,0.01685538,0.320238,25,5.01
+367520,Hollow Knight,music,unigram,0.01554463,0.295335,29,5.8116
+367520,Hollow Knight,cool,unigram,0.01480555,0.281293,11,2.2044
+367520,Hollow Knight,knight,unigram,0.01452724,0.276005,30,6.012
+367520,Hollow Knight,hollow knight,bigram,0.01391966,0.264462,28,5.6112
+413150,Stardew Valley,fun,unigram,0.07253485,1.0,77,15.4
+413150,Stardew Valley,love,unigram,0.04495073,0.619712,55,11.0
+413150,Stardew Valley,best,unigram,0.03622243,0.49938,32,6.4
+413150,Stardew Valley,it's,unigram,0.03081475,0.424827,40,8.0
+413150,Stardew Valley,relaxing,unigram,0.02823323,0.389237,27,5.4
+413150,Stardew Valley,farm,unigram,0.02441239,0.336561,26,5.2
+413150,Stardew Valley,stardew,unigram,0.02125388,0.293016,34,6.8
+413150,Stardew Valley,amazing,unigram,0.0203434,0.280464,22,4.4
+413150,Stardew Valley,farming,unigram,0.01856929,0.256005,29,5.8
+413150,Stardew Valley,life,unigram,0.01834426,0.252903,25,5.0
+413150,Stardew Valley,nice,unigram,0.01819636,0.250864,15,3.0
+413150,Stardew Valley,cozy,unigram,0.01797525,0.247815,35,7.0
+413150,Stardew Valley,peak,unigram,0.01763675,0.243149,14,2.8
+413150,Stardew Valley,chill,unigram,0.01700503,0.234439,17,3.4
+413150,Stardew Valley,valley,unigram,0.01633028,0.225137,28,5.6
+739630,Phasmophobia,fun,unigram,0.08672943,1.0,122,24.4
+739630,Phasmophobia,scary,unigram,0.04105885,0.473413,35,7.0
+739630,Phasmophobia,friends,unigram,0.03794137,0.437468,78,15.6
+739630,Phasmophobia,ghost,unigram,0.03726309,0.429648,60,12.0
+739630,Phasmophobia,update,unigram,0.03117138,0.359409,67,13.4
+739630,Phasmophobia,love,unigram,0.02528595,0.29155,44,8.8
+739630,Phasmophobia,it's,unigram,0.02019106,0.232805,45,9.0
+739630,Phasmophobia,fun friends,bigram,0.01934233,0.223019,26,5.2
+739630,Phasmophobia,spooky,unigram,0.0185333,0.213691,12,2.4
+739630,Phasmophobia,amazing,unigram,0.01756766,0.202557,14,2.8
+739630,Phasmophobia,yes,unigram,0.01711473,0.197335,12,2.4
+739630,Phasmophobia,new,unigram,0.01550452,0.178769,38,7.6
+739630,Phasmophobia,best,unigram,0.01525967,0.175946,15,3.0
+739630,Phasmophobia,got,unigram,0.01500416,0.173,24,4.8
+739630,Phasmophobia,buggy,unigram,0.01480539,0.170708,21,4.2
+945360,Among Us,fun,unigram,0.12561641,1.0,111,22.2445
+945360,Among Us,friends,unigram,0.0395621,0.314944,36,7.2144
+945360,Among Us,sus,unigram,0.03370631,0.268327,26,5.2104
+945360,Among Us,people,unigram,0.02818088,0.224341,32,6.4128
+945360,Among Us,best,unigram,0.02389861,0.190251,19,3.8076
+945360,Among Us,peak,unigram,0.02150591,0.171203,14,2.8056
+945360,Among Us,yes,unigram,0.02023665,0.161099,12,2.4048
+945360,Among Us,amazing,unigram,0.02022278,0.160988,17,3.4068
+945360,Among Us,amogus,unigram,0.01909409,0.152003,10,2.004
+945360,Among Us,love,unigram,0.01901964,0.15141,13,2.6052
+945360,Among Us,fun friends,bigram,0.01847189,0.14705,15,3.006
+945360,Among Us,it's,unigram,0.01588679,0.126471,18,3.6072
+945360,Among Us,imposter,unigram,0.01573416,0.125256,16,3.2064
+945360,Among Us,cool,unigram,0.01282918,0.10213,7,1.4028
+945360,Among Us,dont,unigram,0.01237695,0.09853,10,2.004
+1172470,Apex Legends™,fun,unigram,0.07116883,1.0,69,13.8
+1172470,Apex Legends™,best,unigram,0.03977144,0.558832,33,6.6
+1172470,Apex Legends™,love,unigram,0.02749456,0.386329,27,5.4
+1172470,Apex Legends™,apex,unigram,0.02088477,0.293454,32,6.4
+1172470,Apex Legends™,ass,unigram,0.01716394,0.241172,12,2.4
+1172470,Apex Legends™,hate,unigram,0.01529951,0.214975,14,2.8
+1172470,Apex Legends™,got,unigram,0.01480342,0.208004,17,3.4
+1172470,Apex Legends™,dont,unigram,0.014708,0.206664,14,2.8
+1172470,Apex Legends™,better,unigram,0.01140058,0.160191,12,2.4
+1172470,Apex Legends™,trash,unigram,0.01139369,0.160094,6,1.2
+1172470,Apex Legends™,fix,unigram,0.01129361,0.158688,9,1.8
+1172470,Apex Legends™,fps,unigram,0.01125636,0.158164,10,2.0
+1172470,Apex Legends™,nice,unigram,0.01111935,0.156239,8,1.6
+1172470,Apex Legends™,ranked,unigram,0.01078829,0.151587,9,1.8
+1172470,Apex Legends™,makes,unigram,0.01069489,0.150275,14,2.8
+1245620,ELDEN RING,best,unigram,0.05668401,1.0,58,11.6
+1245620,ELDEN RING,peak,unigram,0.04518444,0.797129,33,6.6
+1245620,ELDEN RING,amazing,unigram,0.02510351,0.442868,23,4.6
+1245620,ELDEN RING,fun,unigram,0.02460592,0.434089,32,6.4
+1245620,ELDEN RING,hard,unigram,0.02205762,0.389133,27,5.4
+1245620,ELDEN RING,elden,unigram,0.02020902,0.356521,34,6.8
+1245620,ELDEN RING,souls,unigram,0.01938143,0.341921,39,7.8
+1245620,ELDEN RING,it's,unigram,0.01795675,0.316787,25,5.0
+1245620,ELDEN RING,ring,unigram,0.01740695,0.307087,32,6.4
+1245620,ELDEN RING,hate,unigram,0.01550821,0.273591,12,2.4
+1245620,ELDEN RING,greatest,unigram,0.01532363,0.270334,12,2.4
+1245620,ELDEN RING,goat,unigram,0.01519355,0.268039,10,2.0
+1245620,ELDEN RING,elden ring,bigram,0.01480428,0.261172,29,5.8
+1245620,ELDEN RING,world,unigram,0.01388125,0.244888,34,6.8
+1245620,ELDEN RING,boss,unigram,0.01380785,0.243593,26,5.2

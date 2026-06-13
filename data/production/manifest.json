@@ -1,0 +1,49 @@
+{
+  "schema_version": "1.0",
+  "generated_at_utc": "2026-06-13T00:14:26.036260+00:00",
+  "catalog_appids": [
+    570,
+    252490,
+    1172470,
+    292030,
+    1245620,
+    413150,
+    739630,
+    945360,
+    236390,
+    367520
+  ],
+  "source_dataset": {
+    "filename": "dataset_limpio.csv",
+    "bytes": 71927342,
+    "sha256": "b79786bad6eeed3ac23b2b51f0104d5fc57ed7cf34f4e1f0ef5e3f6c2e7e7ed5"
+  },
+  "files": {
+    "catalogo_10_juegos.csv": {
+      "bytes": 6308,
+      "sha256": "a0eb422b416a70872b6d8c6dc85a1b076411a0ea275ff01ddfba0ccd8f8cd3a0",
+      "rows": 10
+    },
+    "reviews_analizadas.csv": {
+      "bytes": 2556630,
+      "sha256": "184488ca71852f7f83b70efa68b85b1698c128e36867645990a976e30192cbb6",
+      "rows": 5000
+    },
+    "metricas_sentimiento.json": {
+      "bytes": 10800,
+      "sha256": "feed023b14122d2d30a9cc659220729d01ca874ab08380d5b046bb0521faaad8",
+      "rows": 10
+    },
+    "temas_tfidf.csv": {
+      "bytes": 9370,
+      "sha256": "08cfd8b551ac707becef52ee13aeba22a73b2ad5fcf18d6e5be181dacdc517c4",
+      "rows": 150
+    },
+    "tags_steam.csv": {
+      "bytes": 6632,
+      "sha256": "fe972e79c4de5f9fca26b8332d477fe4b0b52394b0b872f8028f570c96e5db30",
+      "rows": 150
+    }
+  },
+  "total_production_bytes": 2589740
+}
