@@ -15,6 +15,7 @@ data/reviews_extra.json
 
 .venv/
 venv/
+.venv-deploy/
 
 
 # ==========================================================

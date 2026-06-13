@@ -1,30 +1,29 @@
 # ==========================================================
-# CONFIGURACIÓN VISUAL Y DE PRODUCCIÓN — THE DATA MACHINE
+# CONFIGURACIÓN DE PRODUCCIÓN — THE DATA MACHINE
 # ==========================================================
 
 [client]
-# Oculta la navegación técnica automática:
-# app, analisis, homepage y login.
+# La navegación técnica automática se reemplaza por el menú propio.
 showSidebarNavigation = false
 
-# Reduce las opciones técnicas visibles en la barra superior.
+# Reduce las opciones técnicas visibles para el usuario final.
 toolbarMode = "minimal"
 
-# En el navegador se muestra la traza, pero los detalles completos
-# siguen disponibles en la terminal para depuración.
-showErrorDetails = "stacktrace"
+# En producción, los detalles completos permanecen en los logs
+# y el navegador muestra únicamente un mensaje genérico.
+showErrorDetails = "none"
 
-# Evita enlaces externos de ayuda en las pantallas de error.
+# No muestra enlaces externos de ayuda en pantallas de error.
 showErrorLinks = false
 
 
 [server]
-# Requerido para ejecución en servidores sin interfaz gráfica.
+# Requerido para servidores sin interfaz gráfica.
 headless = true
 
 
 [browser]
-# No envía estadísticas de uso de esta ejecución.
+# Desactiva el envío de estadísticas de uso de esta ejecución.
 gatherUsageStats = false
 
 
