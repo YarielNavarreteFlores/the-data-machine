@@ -1,0 +1,67 @@
+{
+  "objetivo": "voted_up",
+  "n_total": 5000,
+  "n_train": 4000,
+  "n_test": 1000,
+  "test_size": 0.2,
+  "random_state": 42,
+  "distribucion_clases": {
+    "positivas": 4054,
+    "negativas": 946
+  },
+  "modelos": {
+    "Regresión logística": {
+      "accuracy": 0.876,
+      "balanced_accuracy": 0.684132,
+      "precision": 0.872156,
+      "recall": 0.992602,
+      "f1": 0.928489,
+      "confusion_matrix": {
+        "true_negative": 71,
+        "false_positive": 118,
+        "false_negative": 6,
+        "true_positive": 805
+      }
+    },
+    "Naive Bayes": {
+      "accuracy": 0.883,
+      "balanced_accuracy": 0.700621,
+      "precision": 0.877996,
+      "recall": 0.993835,
+      "f1": 0.932331,
+      "confusion_matrix": {
+        "true_negative": 77,
+        "false_positive": 112,
+        "false_negative": 5,
+        "true_positive": 806
+      }
+    },
+    "VADER (léxico)": {
+      "accuracy": 0.818801,
+      "balanced_accuracy": 0.758118,
+      "precision": 0.913669,
+      "recall": 0.856661,
+      "f1": 0.884247,
+      "confusion_matrix": {
+        "true_negative": 93,
+        "false_positive": 48,
+        "false_negative": 85,
+        "true_positive": 508
+      },
+      "cobertura": 0.734
+    },
+    "Baseline mayoritario": {
+      "accuracy": 0.811,
+      "balanced_accuracy": 0.5,
+      "precision": 0.811,
+      "recall": 1.0,
+      "f1": 0.895638,
+      "confusion_matrix": {
+        "true_negative": 0,
+        "false_positive": 189,
+        "false_negative": 0,
+        "true_positive": 811
+      }
+    }
+  }
+}

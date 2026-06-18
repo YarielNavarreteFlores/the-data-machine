@@ -1001,7 +1001,17 @@ st.components.v1.html("""
     // ══════════════════════════════════════════════════════════════════════
     // NEBULA BACKGROUND — Canvas incrustado en body, fixed
     // ══════════════════════════════════════════════════════════════════════
+    // Evita apilar nebulosas: elimina una anterior, detiene su bucle (vía
+    // contador de generación) y quita su listener de resize antes de crear
+    // la nueva.
+    win.__tdmNebulaGen = (win.__tdmNebulaGen || 0) + 1;
+    var miGen = win.__tdmNebulaGen;
+    var previo = doc.getElementById('tdm-nebula');
+    if (previo) { previo.remove(); }
+    if (win.__tdmNebulaResize) { win.removeEventListener('resize', win.__tdmNebulaResize); }
+
     var canvas = doc.createElement('canvas');
+    canvas.id = 'tdm-nebula';
     canvas.style.cssText = 'position:fixed;inset:0;z-index:0;pointer-events:none;width:100%;height:100%';
     doc.body.appendChild(canvas);
     var ctx = canvas.getContext('2d');
@@ -1142,11 +1152,15 @@ st.components.v1.html("""
     }
 
     function update() {
+      // Si una nebulosa más nueva (u otra página) tomó el control, este
+      // bucle se detiene en lugar de seguir corriendo en segundo plano.
+      if (miGen !== win.__tdmNebulaGen) return;
       draw();
       requestAnimationFrame(update);
     }
 
     resize();
+    win.__tdmNebulaResize = resize;
     win.addEventListener('resize', resize);
     update();
 

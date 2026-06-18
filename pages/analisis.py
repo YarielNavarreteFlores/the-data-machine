@@ -38,6 +38,15 @@ from src.navigation import (
     requerir_autenticacion,
 )
 
+from src.data_paths import RUTA_PRODUCCION
+
+from src.modelos import (
+    ETIQUETA_BASELINE,
+    ETIQUETA_LOGISTICA,
+    ETIQUETA_NAIVE_BAYES,
+    ETIQUETA_VADER,
+)
+
 from src.styles import BASE_CSS
 
 
@@ -101,6 +110,30 @@ DASHBOARD_CSS = """
 
 st.markdown(BASE_CSS + DASHBOARD_CSS, unsafe_allow_html=True)
 
+# Elimina la nebulosa que el homepage pudo dejar incrustada en el <body> al
+# navegar hacia aquí. Su bucle de animación muere con el iframe del homepage y
+# el canvas queda congelado tapando el fondo. El fondo animado de BASE_CSS
+# (estrellas + scanlines) es suficiente y deja legibles el texto y las gráficas.
+st.components.v1.html(
+    """
+    <script>
+    (function () {
+      try {
+        var win = window.parent, doc = win.document;
+        win.__tdmNebulaGen = (win.__tdmNebulaGen || 0) + 1;
+        var nebula = doc.getElementById('tdm-nebula');
+        if (nebula) { nebula.remove(); }
+        if (win.__tdmNebulaResize) {
+          win.removeEventListener('resize', win.__tdmNebulaResize);
+          win.__tdmNebulaResize = null;
+        }
+      } catch (e) {}
+    })();
+    </script>
+    """,
+    height=0,
+)
+
 
 # ==========================================================
 # CARGA CON CACHÉ
@@ -125,6 +158,30 @@ def crear_nube_cacheada(appid: int, textos: tuple[str, ...]) -> Any:
     """Evita recalcular la nube de palabras en cada interacción."""
     _ = appid  # El appid forma parte de la clave del caché.
     return generar_nube_palabras(textos)
+
+
+@st.cache_data(show_spinner=False)
+def cargar_modelos_aprendizaje() -> dict[str, Any]:
+    """
+    Lee los JSON precalculados por scripts/preparar_modelos.py.
+
+    La app no entrena nada: solo lee estas métricas. Devuelve None en cada
+    clave cuando el archivo todavía no existe.
+    """
+    rutas = {
+        "clasificacion": RUTA_PRODUCCION / "modelos_clasificacion.json",
+        "regresion": RUTA_PRODUCCION / "modelos_regresion.json",
+    }
+
+    datos: dict[str, Any] = {}
+    for clave, ruta in rutas.items():
+        if ruta.exists():
+            with ruta.open("r", encoding="utf-8") as archivo:
+                datos[clave] = json.load(archivo)
+        else:
+            datos[clave] = None
+
+    return datos
 
 
 # ==========================================================
@@ -178,6 +235,38 @@ def mostrar_estado_modelo(metricas: pd.Series) -> None:
         st.error(
             "VADER no alcanza 75 % ni supera el baseline para este videojuego."
         )
+
+
+def figura_matriz_modelo(
+    matriz: dict[str, int],
+    titulo: str,
+    etiqueta_prediccion: str,
+) -> go.Figure:
+    """Construye un heatmap 2x2 de una matriz de confusión {tn, fp, fn, tp}."""
+    z = [
+        [matriz["true_negative"], matriz["false_positive"]],
+        [matriz["false_negative"], matriz["true_positive"]],
+    ]
+
+    fig = go.Figure(
+        data=go.Heatmap(
+            z=z,
+            x=[
+                f"{etiqueta_prediccion} negativa",
+                f"{etiqueta_prediccion} positiva",
+            ],
+            y=["Steam negativa", "Steam positiva"],
+            text=z,
+            texttemplate="%{text}",
+            colorscale="Purples",
+            hovertemplate=(
+                "Real: %{y}<br>Predicción: %{x}<br>Reseñas: %{z}<extra></extra>"
+            ),
+        )
+    )
+    fig.update_layout(title=titulo)
+    aplicar_tema_plotly(fig, altura=380)
+    return fig
 
 
 # ==========================================================
@@ -374,12 +463,19 @@ with col_resumen:
 # PESTAÑAS DEL DASHBOARD
 # ==========================================================
 
-pestana_resumen, pestana_sentimiento, pestana_temas, pestana_reviews = st.tabs(
+(
+    pestana_resumen,
+    pestana_sentimiento,
+    pestana_temas,
+    pestana_reviews,
+    pestana_modelos,
+) = st.tabs(
     [
         "Resumen",
         "Sentimiento",
         "Temas y nube",
         "Reseñas y descarga",
+        "Modelos de aprendizaje",
     ]
 )
 
@@ -390,6 +486,21 @@ pestana_resumen, pestana_sentimiento, pestana_temas, pestana_reviews = st.tabs(
 
 with pestana_resumen:
     st.subheader("Comparación general de sentimiento")
+
+    st.markdown(
+        """
+        <div class="tdm-note">
+        Esta sección resume el sentimiento del juego. La gráfica de barras
+        compara, lado a lado, cómo clasifica VADER las reseñas (positivo,
+        neutral, negativo) frente a la recomendación real de Steam
+        (recomendada o no). Debajo, las métricas de cobertura, accuracy,
+        balanced accuracy y baseline mayoritario indican qué tan bien acierta
+        el modelo. Sirve para ver, de un vistazo, qué opina la comunidad y qué
+        tan confiable es VADER en este juego.
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
     distribucion = construir_distribucion_sentimiento(reviews_juego)
     etiquetas_sentimiento = {
@@ -468,6 +579,21 @@ with pestana_resumen:
 
 with pestana_sentimiento:
     st.subheader("Evaluación detallada de VADER")
+
+    st.markdown(
+        """
+        <div class="tdm-note">
+        Aquí se evalúa a fondo el desempeño de VADER en este juego. La matriz
+        de confusión muestra los aciertos y errores (verdaderos y falsos
+        positivos y negativos), y la tabla reúne las métricas detalladas:
+        accuracy, balanced accuracy, precisión, recall y F1. Los errores
+        absolutos comparan el porcentaje positivo estimado contra el histórico
+        real del juego. Sirve para entender no solo cuánto acierta VADER, sino
+        en qué tipo de reseñas se equivoca.
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
     col_matriz, col_metricas = st.columns([1.1, 1])
 
@@ -582,6 +708,20 @@ with pestana_sentimiento:
 with pestana_temas:
     st.subheader("Temas dominantes en las reseñas")
 
+    st.markdown(
+        """
+        <div class="tdm-note">
+        Esta sección descubre de qué hablan las reseñas sin leerlas una por
+        una. La gráfica de términos TF-IDF muestra las palabras y frases más
+        distintivas del juego, la gráfica de tags reúne las etiquetas que la
+        comunidad de Steam asoció al título, y la nube de palabras resume
+        visualmente el vocabulario más frecuente. La tabla final permite
+        revisar y descargar todos los términos con su frecuencia documental.
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
     col_tfidf, col_tags = st.columns(2)
 
     with col_tfidf:
@@ -682,6 +822,20 @@ with pestana_temas:
 with pestana_reviews:
     st.subheader("Explorador de reseñas")
 
+    st.markdown(
+        """
+        <div class="tdm-note">
+        Aquí puedes explorar las reseñas individuales. Los filtros de
+        sentimiento, recomendación y búsqueda de texto te permiten acotar la
+        lista, la tabla muestra el detalle de cada reseña (fecha, sentimiento,
+        votos, tiempo de juego y texto), y los botones de descarga exportan las
+        reseñas filtradas y el resumen de métricas. Sirve para revisar casos
+        concretos y llevarte los datos en CSV o JSON.
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
     col_sentimiento, col_recomendacion, col_busqueda = st.columns([1, 1, 2])
 
     with col_sentimiento:
@@ -770,6 +924,241 @@ with pestana_reviews:
             mime="application/json",
             use_container_width=True,
         )
+
+# ----------------------------------------------------------
+# PESTAÑA 5: MODELOS DE APRENDIZAJE
+# ----------------------------------------------------------
+
+with pestana_modelos:
+    st.subheader("Modelos de aprendizaje supervisado")
+    st.caption(
+        "Modelos entrenados sobre el corpus completo (las 5,000 reseñas de "
+        "todos los juegos), no por juego. Las métricas se precalculan con "
+        "`python scripts/preparar_modelos.py` y la app solo las lee."
+    )
+
+    st.markdown(
+        """
+        <div class="tdm-note">
+        <b>¿Para qué sirve este apartado?</b> Complementa el análisis de
+        sentimiento de VADER, un método <i>no supervisado</i> basado en un
+        diccionario de palabras, con modelos de aprendizaje automático
+        <i>supervisado</i>, que aprenden directamente de las reseñas ya
+        etiquetadas. Busca responder dos preguntas: <b>(1)</b> ¿se puede
+        predecir si una reseña recomienda el juego (<code>voted_up</code>) a
+        partir de su texto?, y <b>(2)</b> ¿qué tan bien se estima la utilidad
+        ponderada de una reseña (<code>weighted_vote_score</code>) a partir de
+        variables numéricas como votos y horas jugadas?
+        <br><br>
+        <b>Cómo leer cada parte:</b>
+        <ul style="margin:0.3rem 0 0 1rem;">
+          <li><b>Tabla de clasificación:</b> para cada modelo (Regresión
+              logística y Naive Bayes), junto a VADER y al baseline de clase
+              mayoritaria, muestra accuracy, balanced accuracy, precisión,
+              recall y F1 sobre el mismo conjunto de prueba.</li>
+          <li><b>Gráfica de barras:</b> compara de un vistazo el accuracy y el
+              balanced accuracy de todos: cuál acierta más en general y cuál
+              maneja mejor el desbalance de clases.</li>
+          <li><b>Matrices de confusión (heatmaps):</b> muestran aciertos y
+              errores, cuántas reseñas positivas y negativas clasificó bien o
+              mal VADER frente al mejor modelo supervisado.</li>
+          <li><b>Regresión:</b> R², MAE y RMSE indican qué tan bien el modelo
+              lineal estima la puntuación, y la dispersión <i>predicho vs.
+              real</i> muestra qué tan cerca quedan las predicciones de la
+              línea ideal (la diagonal).</li>
+        </ul>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    modelos_ml = cargar_modelos_aprendizaje()
+    datos_clasificacion = modelos_ml.get("clasificacion")
+    datos_regresion = modelos_ml.get("regresion")
+
+    if datos_clasificacion is None or datos_regresion is None:
+        st.info(
+            "Aún no existen los modelos precalculados. Genera los JSON con:\n\n"
+            "`python scripts/preparar_modelos.py`"
+        )
+    else:
+        modelos_dict = datos_clasificacion["modelos"]
+
+        etiquetas_metricas = {
+            "accuracy": "Accuracy",
+            "balanced_accuracy": "Balanced acc.",
+            "precision": "Precisión",
+            "recall": "Recall",
+            "f1": "F1",
+        }
+
+        # ── 1) Clasificación vs VADER ─────────────────────────────────────
+        st.markdown("#### Clasificación: ¿la reseña recomienda el juego? (voted_up)")
+        st.caption(
+            "Regresión logística y Naive Bayes sobre el TF-IDF del texto, "
+            "comparadas contra VADER y el baseline de clase mayoritaria sobre "
+            f"el mismo conjunto de prueba ({datos_clasificacion['n_test']:,} reseñas)."
+        )
+
+        tabla_modelos = pd.DataFrame(
+            [
+                {
+                    "Modelo": nombre,
+                    **{
+                        etiqueta: formatear_proporcion(metricas.get(clave))
+                        for clave, etiqueta in etiquetas_metricas.items()
+                    },
+                }
+                for nombre, metricas in modelos_dict.items()
+            ]
+        )
+        st.dataframe(tabla_modelos, hide_index=True, use_container_width=True)
+
+        filas_grafica = []
+        for nombre, metricas in modelos_dict.items():
+            filas_grafica.append(
+                {"Modelo": nombre, "Métrica": "Accuracy", "Valor": metricas["accuracy"]}
+            )
+            filas_grafica.append(
+                {
+                    "Modelo": nombre,
+                    "Métrica": "Balanced accuracy",
+                    "Valor": metricas["balanced_accuracy"],
+                }
+            )
+
+        fig_modelos = px.bar(
+            pd.DataFrame(filas_grafica),
+            x="Modelo",
+            y="Valor",
+            color="Métrica",
+            barmode="group",
+            text_auto=".2f",
+            labels={"Valor": "Proporción (0 a 1)"},
+            title="Comparación de modelos frente a VADER y baseline",
+        )
+        fig_modelos.update_yaxes(range=[0, 1])
+        aplicar_tema_plotly(fig_modelos)
+        st.plotly_chart(
+            fig_modelos,
+            use_container_width=True,
+            config={"displaylogo": False},
+        )
+
+        # Reporte honesto del resultado (aunque el modelo no gane).
+        supervisados = {
+            nombre: modelos_dict[nombre]
+            for nombre in (ETIQUETA_LOGISTICA, ETIQUETA_NAIVE_BAYES)
+            if nombre in modelos_dict
+        }
+        mejor_nombre = max(
+            supervisados,
+            key=lambda nombre: supervisados[nombre]["accuracy"],
+        )
+        mejor = supervisados[mejor_nombre]
+        vader = modelos_dict.get(ETIQUETA_VADER)
+        baseline = modelos_dict.get(ETIQUETA_BASELINE)
+
+        partes = [
+            f"El mejor modelo supervisado es **{mejor_nombre}** "
+            f"(accuracy {formatear_proporcion(mejor['accuracy'])}, "
+            f"balanced {formatear_proporcion(mejor['balanced_accuracy'])})."
+        ]
+        if vader is not None:
+            partes.append(
+                f"VADER obtiene accuracy {formatear_proporcion(vader['accuracy'])} "
+                f"y balanced {formatear_proporcion(vader['balanced_accuracy'])}."
+            )
+        if baseline is not None:
+            partes.append(
+                "El baseline mayoritario alcanza accuracy "
+                f"{formatear_proporcion(baseline['accuracy'])}."
+            )
+
+        if baseline is not None and mejor["accuracy"] > baseline["accuracy"]:
+            st.success(" ".join(partes))
+        else:
+            st.warning(" ".join(partes) + " El modelo no supera al baseline.")
+
+        if vader is not None and vader["balanced_accuracy"] > mejor["balanced_accuracy"]:
+            st.info(
+                "Nota: por el desbalance de clases (muchas más reseñas positivas "
+                "que negativas), VADER logra mejor *balanced accuracy* aunque el "
+                "modelo supervisado tenga mayor accuracy global."
+            )
+
+        # ── 2) Matrices de confusión ──────────────────────────────────────
+        st.markdown("#### Matrices de confusión")
+        col_vader, col_modelo = st.columns(2)
+
+        with col_vader:
+            if vader is not None:
+                st.plotly_chart(
+                    figura_matriz_modelo(
+                        vader["confusion_matrix"],
+                        "VADER (léxico)",
+                        "VADER",
+                    ),
+                    use_container_width=True,
+                    config={"displaylogo": False},
+                )
+
+        with col_modelo:
+            st.plotly_chart(
+                figura_matriz_modelo(
+                    mejor["confusion_matrix"],
+                    mejor_nombre,
+                    "Modelo",
+                ),
+                use_container_width=True,
+                config={"displaylogo": False},
+            )
+
+        # ── 3) Regresión ──────────────────────────────────────────────────
+        st.markdown("#### Regresión: predecir weighted_vote_score")
+        st.caption(
+            "LinearRegression con features numéricas (votos, tiempo de juego, "
+            "reseñas del autor, etc.) para estimar la puntuación ponderada de "
+            f"utilidad de la reseña. Evaluada en {datos_regresion['n_test']:,} "
+            "reseñas de prueba."
+        )
+
+        col_r2, col_mae, col_rmse = st.columns(3)
+        col_r2.metric("R²", formatear_numero(datos_regresion["r2"], 3))
+        col_mae.metric("MAE", formatear_numero(datos_regresion["mae"], 4))
+        col_rmse.metric("RMSE", formatear_numero(datos_regresion["rmse"], 4))
+
+        puntos = pd.DataFrame(datos_regresion["puntos"])
+
+        fig_regresion = px.scatter(
+            puntos,
+            x="real",
+            y="predicho",
+            opacity=0.5,
+            labels={
+                "real": "weighted_vote_score real",
+                "predicho": "Predicho",
+            },
+            title="Predicho vs. real (conjunto de prueba)",
+        )
+
+        minimo = float(min(puntos["real"].min(), puntos["predicho"].min()))
+        maximo = float(max(puntos["real"].max(), puntos["predicho"].max()))
+        fig_regresion.add_shape(
+            type="line",
+            x0=minimo,
+            y0=minimo,
+            x1=maximo,
+            y1=maximo,
+            line=dict(color="#26c6da", dash="dash"),
+        )
+        aplicar_tema_plotly(fig_regresion, altura=460)
+        st.plotly_chart(
+            fig_regresion,
+            use_container_width=True,
+            config={"displaylogo": False},
+        )
+
 
 st.caption(
     "Los gráficos de Plotly pueden descargarse como PNG mediante el icono de cámara de cada gráfica."

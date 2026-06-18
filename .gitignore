@@ -9,6 +9,16 @@ data/reviews_extra.json
 
 
 # ==========================================================
+# CREDENCIALES DE USUARIO
+# El archivo de cuentas es local y no debe subirse al repo.
+# La carpeta se versiona vacía mediante .gitkeep.
+# ==========================================================
+
+data/auth/usuarios.json
+!data/auth/.gitkeep
+
+
+# ==========================================================
 # ENTORNOS VIRTUALES DE PYTHON
 # Cada integrante debe crear su propio entorno local.
 # ==========================================================
@@ -49,6 +59,10 @@ Thumbs.db
 
 .env
 AGENTS.md
+
+# Configuración local de Claude Code (no debe subirse al repositorio).
+.claude
+CLAUDE.md
 
 # ==========================================================
 # REGISTROS GENERADOS POR EL SCRAPER
