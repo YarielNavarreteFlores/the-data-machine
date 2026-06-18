@@ -4,7 +4,7 @@
 
 - [ ] `git status --short` vacío.
 - [ ] Rama final actualizada desde el Bloque 5C.
-- [ ] 33 pruebas en `OK`.
+- [ ] 56 pruebas en `OK`.
 - [ ] `validar_bloque5c.py` aprobado.
 - [ ] `prueba_arranque_streamlit.py` aprobada.
 - [ ] `validar_bloque5d.py` aprobado.

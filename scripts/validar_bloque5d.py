@@ -24,7 +24,7 @@ MARCADORES_README = (
     "5,000 reseñas",
     "10 videojuegos",
     "8,854,428",
-    "33 pruebas",
+    "56 pruebas",
     URL_APP,
     "data/production",
     "Python 3.12",
@@ -38,7 +38,6 @@ TEXTOS_OBSOLETOS = (
     "pages/1_Login.py",
     "pages/2_Homepage.py",
     "pages/3_Analisis.py",
-    "src/auth.py",
     "src/data_loader.py",
     "games_march2025_cleaned.csv",
     "+21 millones de reseñas",
@@ -91,7 +90,7 @@ def main() -> int:
         "arquitectura": ("src/scraper.py", "src/nlp.py", "src/production.py", "Streamlit Community Cloud"),
         "resultados": ("Accuracy promedio", "Baseline", "Limitaciones", "80.4 %"),
         "demo": ("Guion sugerido", "Dota 2", "War Thunder", "Plan de contingencia"),
-        "checklist": ("33 pruebas", "Pull request", "Teams", "v1.0.0"),
+        "checklist": ("56 pruebas", "Pull request", "Teams", "v1.0.0"),
     }
 
     for documento, marcadores in comprobaciones.items():

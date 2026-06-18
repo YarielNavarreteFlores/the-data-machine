@@ -109,20 +109,31 @@ flowchart TB
 ### 3.5 Presentación
 
 - `app.py`: enrutador inicial.
-- `pages/login.py`: login demostrativo.
+- `pages/login.py`: login y registro, con cuentas guardadas en `data/auth/usuarios.json` (texto plano, demostrativo).
 - `pages/homepage.py`: catálogo y selección.
-- `pages/analisis.py`: dashboard con cuatro pestañas.
+- `pages/analisis.py`: dashboard con cinco pestañas (Resumen, Sentimiento, Temas y nube, Reseñas y descarga, Modelos de aprendizaje).
+- `src/auth.py`: registro, verificación de credenciales y persistencia de cuentas en JSON.
 - `src/dashboard.py`: carga y transformaciones para visualización.
 - `src/navigation.py`: sesión y `selected_appid`.
 - `src/menu_usuario.py`: barra lateral y cierre de sesión.
 - `src/styles.py`: identidad visual.
+
+### 3.6 Modelos de aprendizaje
+
+`src/modelos.py` añade modelos supervisados como complemento a VADER:
+
+- clasificación de `voted_up` desde el texto con LogisticRegression y MultinomialNB sobre TF-IDF (mismas stopwords de dominio que `src/nlp.py`);
+- comparación contra VADER y el baseline mayoritario sobre el mismo conjunto de prueba (accuracy, balanced accuracy, precision, recall, F1, matriz de confusión);
+- regresión lineal sobre `weighted_vote_score` con métricas R², MAE y RMSE.
+
+`scripts/preparar_modelos.py` entrena y guarda las métricas en `data/production/modelos_clasificacion.json` y `data/production/modelos_regresion.json`. La aplicación solo lee esos JSON (cacheados con `st.cache_data`); no reentrena nada en tiempo de ejecución.
 
 ## 4. Estado de sesión
 
 ```mermaid
 stateDiagram-v2
     [*] --> Login
-    Login --> Homepage: credenciales no vacías
+    Login --> Homepage: registro o credenciales válidas
     Homepage --> Analisis: establecer_juego(appid)
     Analisis --> Homepage: volver al catálogo
     Homepage --> Login: cerrar sesión

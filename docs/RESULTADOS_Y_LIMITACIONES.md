@@ -56,7 +56,22 @@ TF-IDF entrega 15 términos por juego, incluyendo unigramas y bigramas. Estos re
 
 La nube de palabras ayuda a explorar vocabulario frecuente, pero no sustituye una evaluación temática formal.
 
-## 7. Limitaciones
+## 7. Modelos supervisados (corpus global)
+
+Como complemento a VADER, se entrenaron modelos supervisados sobre el corpus completo (5,000 reseñas de los 10 juegos) para predecir `voted_up` a partir del texto, con división de prueba estratificada.
+
+| Modelo | Accuracy | Balanced accuracy |
+|---|---:|---:|
+| Naive Bayes | 88.3 % | 70.1 % |
+| Regresión logística | 87.6 % | 68.4 % |
+| VADER (léxico) | 81.9 % | 75.8 % |
+| Baseline mayoritario | 81.1 % | 50.0 % |
+
+Los modelos supervisados superan a VADER en accuracy global, pero VADER conserva mejor balanced accuracy debido al fuerte desbalance de clases (muchas más reseñas positivas que negativas). La aplicación reporta este matiz de forma explícita.
+
+Adicionalmente, una regresión lineal sobre `weighted_vote_score` con variables numéricas (votos, tiempo de juego, reseñas del autor) obtuvo R² ≈ 0.47, MAE ≈ 0.0034 y RMSE ≈ 0.0090 en el conjunto de prueba.
+
+## 8. Limitaciones
 
 ### Datos
 
@@ -73,15 +88,15 @@ La nube de palabras ayuda a explorar vocabulario frecuente, pero no sustituye un
 
 ### Aplicación
 
-- El login es demostrativo.
+- El login y el registro guardan las cuentas en un JSON local (`data/auth/usuarios.json`) con contraseñas en texto plano; es demostrativo y no apto para producción.
 - El despliegue utiliza resultados precalculados y no realiza scraping en tiempo real.
 - La versión de Community Cloud tiene recursos limitados.
 
-## 8. Trabajo futuro
+## 9. Trabajo futuro
 
 1. Muestreo por periodos y tipo de recomendación.
 2. Detección de idioma y análisis multilingüe.
-3. Modelos supervisados o Transformers.
+3. Extender la comparación hacia modelos basados en Transformers (la comparación con supervisados clásicos ya está implementada).
 4. Calibración de umbrales por dominio.
 5. Análisis temporal y detección de cambios después de actualizaciones.
 6. Datos en Parquet/base de datos para escalar.

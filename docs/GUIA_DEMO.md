@@ -27,8 +27,8 @@ Realizar una demostración reproducible de 6 a 8 minutos sin depender de scrapin
 
 ### 2. Login y catálogo - 45 segundos
 
-- Mostrar el login.
-- Explicar que es demostrativo y maneja sesión.
+- Mostrar el login y el botón para alternar a registro.
+- Explicar que registro e inicio de sesión guardan las cuentas en un JSON local (`data/auth/usuarios.json`), con contraseña en texto plano; es demostrativo.
 - Entrar y mostrar los 10 juegos.
 - Señalar metadata: precio, aprobación, Metacritic, géneros e imagen.
 
@@ -45,6 +45,14 @@ Realizar una demostración reproducible de 6 a 8 minutos sin depender de scrapin
 - Abrir Temas y nube.
 - Distinguir TF-IDF de tags de Steam.
 
+### 4.5 Modelos de aprendizaje - 1 minuto
+
+- Abrir la pestaña "Modelos de aprendizaje".
+- Explicar que compara VADER (no supervisado) contra modelos supervisados (Regresión logística y Naive Bayes) entrenados sobre el corpus completo.
+- Mostrar la tabla, la gráfica de barras y las matrices de confusión.
+- Comentar que los supervisados ganan en accuracy, pero VADER conserva mejor balanced accuracy por el desbalance de clases.
+- Señalar la regresión lineal sobre `weighted_vote_score` (R², MAE, RMSE).
+
 ### 5. Cambio de juego - 1 minuto
 
 - Cambiar a War Thunder.
@@ -60,7 +68,7 @@ Realizar una demostración reproducible de 6 a 8 minutos sin depender de scrapin
 
 - Mostrar el repositorio.
 - Mencionar scraper, NLP, paquete de producción y Streamlit.
-- Indicar 33 pruebas automatizadas y despliegue en Python 3.12.
+- Indicar 56 pruebas automatizadas y despliegue en Python 3.12.
 
 ### 8. Cierre - 30 segundos
 
@@ -86,7 +94,7 @@ El histórico acumula años de reseñas; la muestra contiene 500 opiniones recie
 
 ### ¿El login es seguro?
 
-No. Es un prototipo de manejo de sesión. Una versión real requeriría usuarios persistentes, hash de contraseñas y control de roles.
+No. Registro e inicio de sesión guardan las cuentas en un JSON local (`data/auth/usuarios.json`) con la contraseña en texto plano; es un prototipo demostrativo. Una versión real requeriría hash de contraseñas, usuarios persistentes y control de roles.
 
 ### ¿Puede escalar?
 
